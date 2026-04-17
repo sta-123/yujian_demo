@@ -126,7 +126,7 @@ if page == "🏠 系统首页":
         st.markdown(f"<h2 style='text-align: center; color: {color}; font-weight: bold;'>{risk_level}</h2>", unsafe_allow_html=True)
     with col_b:
         st.warning(reason)
-        st.page_link("pages/2_⚠️_风险预警中心.py", label="点击查看完整风险报告与就医指导", icon="→")
+        st.info("👉 可点击左侧导航栏「风险预警中心」查看完整风险报告与就医指导")
 
 # -------------------------- 2. 实时健康监测（新增核心功能，满足实时检测要求） --------------------------
 elif page == "📡 实时健康监测":
