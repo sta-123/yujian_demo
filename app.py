@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 核心CSS（修复按钮看不清+排版规整）--------------------------
+# -------------------------- 核心CSS（彻底修复按钮+卡片视觉）--------------------------
 st.markdown("""
 <style>
     /* 全局背景与字体 */
@@ -25,7 +25,7 @@ st.markdown("""
         background-attachment: fixed;
     }
     
-    /* 玻璃拟态容器（统一规整排版） */
+    /* 玻璃拟态容器（统一等高+视觉拉满） */
     div[data-testid="stVerticalBlock"] > div[class*="stContainer"] {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(20px);
@@ -36,12 +36,13 @@ st.markdown("""
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
         margin-bottom: 1.5rem;
+        height: 100%;
     }
     
     div[data-testid="stVerticalBlock"] > div[class*="stContainer"]:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 40px rgba(22, 93, 255, 0.2);
-        border: 1px solid rgba(22, 93, 255, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(22, 93, 255, 0.25);
+        border: 1px solid rgba(22, 93, 255, 0.4);
     }
     
     /* 侧边栏样式 */
@@ -89,25 +90,35 @@ st.markdown("""
         margin-bottom: 1.5rem;
     }
     
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+    
     /* 指标卡片样式 */
     [data-testid="stMetric"] {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
-        padding: 1.2rem;
+        padding: 1rem;
         color: white;
     }
     
     [data-testid="stMetric"] label {
         color: rgba(255, 255, 255, 0.6) !important;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 500;
     }
     
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
         color: #ffffff !important;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: 700;
     }
     
@@ -131,23 +142,31 @@ st.markdown("""
         background: linear-gradient(135deg, #0e4bcc 0%, #2563eb 100%);
     }
     
-    /* 修复上传按钮看不清的核心样式 */
+    /* 彻底修复上传按钮看不清的问题 */
     .stFileUploader > div {
-        background: rgba(255,255,255,0.03);
-        border: 1px dashed rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+        border: 2px dashed rgba(22, 93, 255, 0.5);
         border-radius: 10px;
         color: white;
-        padding: 1rem;
+        padding: 1.2rem;
+        transition: all 0.3s ease;
+    }
+    .stFileUploader > div:hover {
+        border-color: #165DFF;
+        background: rgba(22, 93, 255, 0.1);
     }
     .stFileUploader > div > button {
-        background: rgba(22, 93, 255, 0.9);
+        background: linear-gradient(135deg, #165DFF 0%, #3b82f6 100%);
         color: white;
-        border: 1px solid rgba(22, 93, 255, 0.5);
+        border: none;
         border-radius: 8px;
         width: 100%;
+        font-weight: 600;
+        margin-top: 0.5rem;
     }
     .stFileUploader > div > span {
-        color: rgba(255,255,255,0.7);
+        color: rgba(255,255,255,0.8);
+        font-size: 0.85rem;
     }
     
     /* 文本颜色统一 */
@@ -199,6 +218,17 @@ st.markdown("""
         border-radius: 10px;
     }
     
+    /* 数字输入框样式 */
+    .stNumberInput > div > div > input {
+        background: rgba(255,255,255,0.05);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+    }
+    .stNumberInput > div > div > button {
+        color: white;
+    }
+    
     /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -228,7 +258,7 @@ with st.sidebar:
     st.divider()
     st.caption("© 2026 PREHEALTH MED·AI | All Rights Reserved")
 
-# -------------------------- 全局数据初始化（彻底修复KeyError报错）--------------------------
+# -------------------------- 全局数据初始化（彻底避免报错）--------------------------
 # 用户基础数据
 if 'user_data' not in st.session_state:
     st.session_state.user_data = {
@@ -238,7 +268,6 @@ if 'user_data' not in st.session_state:
         "lifestyle": "熬夜（日均睡眠6小时）、久坐、工作压力大",
         "health_score": 58
     }
-# 强制确保健康评分存在，彻底避免KeyError
 st.session_state.user_data.setdefault("health_score", 58)
 
 # 14天健康时序数据
@@ -279,7 +308,7 @@ def predict_risk(health_data, user_info):
     else:
         return "低危", "#00c853", "当前健康指标平稳，无显著异常风险，继续保持良好生活习惯。", 92
 
-# -------------------------- 1. 系统首页（规整排版，无杂乱内容）--------------------------
+# -------------------------- 1. 系统首页 --------------------------
 if page == "🏠 系统首页":
     st.markdown('<p class="main-title">🩺 预健·MED·AI 中青年急重症智能预警系统</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">基于多模态时序大数据与深度学习，实现急重症的早发现、早预警、早干预</p>', unsafe_allow_html=True)
@@ -297,14 +326,14 @@ if page == "🏠 系统首页":
 
     st.divider()
     
-    # 主体内容区（双列规整布局）
+    # 主体内容区
     col_main1, col_main2 = st.columns([1, 2])
     
     with col_main1:
         # 用户健康档案卡片
         with st.container():
-            st.subheader("👤 用户健康档案")
-            # 健康评分进度条（修复报错）
+            st.markdown('<p class="card-title">👤 用户健康档案</p>', unsafe_allow_html=True)
+            # 健康评分进度条
             health_score = st.session_state.user_data['health_score']
             st.progress(health_score, text=f"健康评分：{health_score}/100")
             st.divider()
@@ -335,7 +364,7 @@ if page == "🏠 系统首页":
     with col_main2:
         # 健康趋势卡片
         with st.container():
-            st.subheader("📈 核心健康指标趋势（近14天）")
+            st.markdown('<p class="card-title">📈 核心健康指标趋势（近14天）</p>', unsafe_allow_html=True)
             tab1, tab2 = st.tabs(["血压变化趋势", "心率变化趋势"])
             with tab1:
                 st.line_chart(
@@ -356,7 +385,7 @@ if page == "🏠 系统首页":
     
     # 风险概览卡片
     with st.container():
-        st.subheader("⚠️ 当前健康风险概览")
+        st.markdown('<p class="card-title">⚠️ 当前健康风险概览</p>', unsafe_allow_html=True)
         risk_level, color, reason = st.session_state.risk_result
         col_a, col_b = st.columns([1, 3])
         with col_a:
@@ -431,7 +460,7 @@ elif page == "📡 实时健康监测":
     st.divider()
     # 监测说明卡片
     with st.container():
-        st.subheader("📌 功能说明")
+        st.markdown('<p class="card-title">📌 功能说明</p>', unsafe_allow_html=True)
         col_a, col_b, col_c = st.columns(3)
         with col_a:
             st.write("**📡 实时采集**")
@@ -443,25 +472,34 @@ elif page == "📡 实时健康监测":
             st.write("**🚨 分级报警**")
             st.caption("针对不同风险等级，触发对应级别的报警与干预建议，避免漏报误报")
 
-# -------------------------- 3. 数据同步中心（修复上传按钮看不清）--------------------------
+# -------------------------- 3. 数据同步中心（彻底重构·视觉拉满版）--------------------------
 elif page == "📊 数据同步中心":
     st.markdown('<p class="main-title">📊 多源健康数据同步中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">打通可穿戴设备、体检报告、居家检测全维度数据，打破健康数据孤岛</p>', unsafe_allow_html=True)
     
-    # 三个核心功能卡片（规整排版）
+    # 三个核心卡片（等高布局·视觉拉满）
     col1, col2, col3 = st.columns(3)
+    
+    # 卡片1：可穿戴设备同步
     with col1:
         with st.container():
-            st.subheader("⌚ 可穿戴设备同步")
+            # 标题+图标
+            st.markdown('<p class="card-title"><span style="color: #165DFF;">⌚</span> 可穿戴设备同步</p>', unsafe_allow_html=True)
+            # 支持品牌
+            st.write("**已支持设备品牌**")
+            st.caption("✅ 苹果Apple Watch | ✅ 华为Watch\n✅ 小米手环 | ✅ OPPO Watch\n✅ 荣耀手环 | ✅ 华米Amazfit")
             st.divider()
-            st.write("**已支持设备品牌**：")
-            st.caption("✅ 苹果Apple Watch | ✅ 华为Watch | ✅ 小米手环\n✅ OPPO Watch | ✅ 荣耀手环 | ✅ 华米Amazfit")
-            st.divider()
+            # 数据统计（双列指标）
             col_a, col_b = st.columns(2)
             col_a.metric("累计同步天数", "14天")
             col_b.metric("数据条目", "2016条")
             st.divider()
-            if st.button("绑定/同步设备", key="wearable"):
+            # 同步进度条
+            st.write("**同步进度**")
+            st.progress(100, text="已完成全量数据同步")
+            st.divider()
+            # 交互按钮
+            if st.button("🔗 绑定/同步设备", key="wearable"):
                 with st.spinner("正在连接设备..."):
                     time.sleep(1)
                     st.success("✅ 设备连接成功！")
@@ -469,18 +507,25 @@ elif page == "📊 数据同步中心":
                     time.sleep(1.5)
                     st.success("✅ 数据同步完成！已更新至风险模型")
 
+    # 卡片2：体检报告智能解析
     with col2:
         with st.container():
-            st.subheader("📄 体检报告智能解析")
-            st.divider()
+            # 标题+图标
+            st.markdown('<p class="card-title"><span style="color: #7b61ff;">📄</span> 体检报告智能解析</p>', unsafe_allow_html=True)
+            # 支持说明
             st.write("**支持格式**：PDF、JPG、PNG图片")
             st.write("**支持机构**：全国90%以上体检机构、公立医院体检中心")
             st.divider()
+            # 数据统计（双列指标）
             col_a, col_b = st.columns(2)
             col_a.metric("累计解析报告", "2份")
             col_b.metric("提取核心指标", "128项")
             st.divider()
-            # 修复后的上传按钮，清晰可见
+            # 解析准确率
+            st.write("**OCR识别准确率**")
+            st.progress(98, text="98%")
+            st.divider()
+            # 上传按钮（彻底修复，清晰可见）
             uploaded_file = st.file_uploader("上传新的体检报告", type=["pdf", "png", "jpg"], label_visibility="collapsed")
             if uploaded_file is not None:
                 with st.spinner("正在OCR识别并解析报告..."):
@@ -488,29 +533,37 @@ elif page == "📊 数据同步中心":
                     st.success("✅ 报告解析完成！")
                     st.write("已提取128项核心健康指标，已同步至风险模型")
 
+    # 卡片3：居家检测数据录入
     with col3:
         with st.container():
-            st.subheader("🏠 居家检测数据录入")
-            st.divider()
+            # 标题+图标
+            st.markdown('<p class="card-title"><span style="color: #00c853;">🏠</span> 居家检测数据录入</p>', unsafe_allow_html=True)
+            # 支持说明
             st.write("**支持录入指标**：血压、血糖、心率、尿酸、体重")
             st.write("**数据用途**：补充日常监测数据，优化风险预测精度")
             st.divider()
+            # 数据统计（双列指标）
             col_a, col_b = st.columns(2)
             col_a.metric("今日已录入", "3条")
             col_b.metric("连续录入天数", "7天")
             st.divider()
+            # 录入完成率
+            st.write("**本月录入完成率**")
+            st.progress(70, text="70%")
+            st.divider()
+            # 录入表单
             new_bp_s = st.number_input("今日收缩压（mmHg）", min_value=80, max_value=200, value=135)
             new_bp_d = st.number_input("今日舒张压（mmHg）", min_value=50, max_value=120, value=88)
             new_hr = st.number_input("今日静息心率（次/分）", min_value=50, max_value=120, value=84)
-            if st.button("保存今日数据", key="home"):
+            if st.button("💾 保存今日数据", key="home"):
                 st.success("✅ 数据已保存！已同步更新至风险预测模型")
     
     st.divider()
-    # 数据预览卡片
+    # 全量数据预览卡片
     with st.container():
-        st.subheader("📋 已同步健康数据预览")
+        st.markdown('<p class="card-title">📋 已同步健康数据全量预览</p>', unsafe_allow_html=True)
         st.dataframe(st.session_state.health_data, use_container_width=True, height=300)
-        st.caption("* 以上为近14天的核心健康指标时序数据")
+        st.caption("* 以上为近14天的核心健康指标时序数据，已全部同步至AI风险预测模型")
 
 # -------------------------- 4. 风险预警中心 --------------------------
 elif page == "⚠️ 风险预警中心":
@@ -522,7 +575,7 @@ elif page == "⚠️ 风险预警中心":
     col1, col2 = st.columns([1, 2])
     with col1:
         with st.container():
-            st.subheader("🎯 最终风险评级")
+            st.markdown('<p class="card-title">🎯 最终风险评级</p>', unsafe_allow_html=True)
             st.markdown(f"<h1 style='text-align: center; color: {color}; font-weight: bold; font-size: 3rem;'>{risk_level}</h1>", unsafe_allow_html=True)
             st.progress(85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15)
             st.caption("风险指数：85/100")
@@ -538,7 +591,7 @@ elif page == "⚠️ 风险预警中心":
 
     with col2:
         with st.container():
-            st.subheader("🔍 风险来源深度分析")
+            st.markdown('<p class="card-title">🔍 风险来源深度分析</p>', unsafe_allow_html=True)
             st.warning(reason)
             st.divider()
             st.write("**核心异常指标明细（近3天）**：")
@@ -568,7 +621,7 @@ elif page == "⚠️ 风险预警中心":
     
     # 就医指导卡片
     with st.container():
-        st.subheader("🏥 精准就医指导与干预建议")
+        st.markdown('<p class="card-title">🏥 精准就医指导与干预建议</p>', unsafe_allow_html=True)
         if risk_level == "极高危":
             st.error("⚠️ 【极高危紧急响应】请立即启动以下流程：")
             col_a, col_b = st.columns(2)
@@ -602,7 +655,7 @@ elif page == "💊 健康管理中心":
     with col1:
         # 随访计划卡片
         with st.container():
-            st.subheader("📅 个性化随访计划")
+            st.markdown('<p class="card-title">📅 个性化随访计划</p>', unsafe_allow_html=True)
             st.progress(20, text="本周完成进度：1/5")
             st.divider()
             st.write("✅ **今日待完成**：测量血压心率并上传系统")
@@ -625,7 +678,7 @@ elif page == "💊 健康管理中心":
         
         # 健康科普卡片
         with st.container():
-            st.subheader("📚 今日健康科普")
+            st.markdown('<p class="card-title">📚 今日健康科普</p>', unsafe_allow_html=True)
             st.info("【心源性猝死的3个早期隐匿信号】\n1. 不明原因的持续疲劳乏力，休息后无法缓解；\n2. 夜间静息心率持续升高超过10%，波动幅度大；\n3. 活动后胸闷气短加重，伴随左肩、后背放射性疼痛。")
             st.divider()
             st.write("**权威参考指南**：")
@@ -635,7 +688,7 @@ elif page == "💊 健康管理中心":
     with col2:
         # 干预方案卡片
         with st.container():
-            st.subheader("🥗 个体化生活方式干预方案")
+            st.markdown('<p class="card-title">🥗 个体化生活方式干预方案</p>', unsafe_allow_html=True)
             st.divider()
             st.write("**作息调整**")
             st.caption("每日23:00前入睡，保证7.5小时睡眠，禁止熬夜，午间可休息20-30分钟")
@@ -652,7 +705,7 @@ elif page == "💊 健康管理中心":
         
         # 提醒卡片
         with st.container():
-            st.subheader("🔔 用药与复查提醒")
+            st.markdown('<p class="card-title">🔔 用药与复查提醒</p>', unsafe_allow_html=True)
             st.divider()
             st.write("**每日提醒**：早8点、晚8点测量血压心率并上传系统")
             st.write("**复查提醒**：2026-XX-XX 心内科就诊，完善24小时动态心电图、冠脉CTA检查")
