@@ -283,9 +283,10 @@ st.session_state.user_data.setdefault("health_score", 58)
 if 'health_data' not in st.session_state:
     dates = [datetime.now() - timedelta(days=i) for i in range(14, 0, -1)]
     base_hr = np.random.randint(65, 75, 11)
-    abnormal_hr = [78, 82, 85]
+    # 修正：将列表改为numpy数组，支持向量运算
+    abnormal_hr = np.array([78, 82, 85])
     base_bp = np.random.randint(115, 130, 11)
-    abnormal_bp = [135, 140, 145]
+    abnormal_bp = np.array([135, 140, 145])
     
     st.session_state.health_data = pd.DataFrame({
         "日期": dates,
