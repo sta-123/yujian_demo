@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 核心CSS（彻底修复按钮+卡片视觉）--------------------------
+# -------------------------- 核心CSS（两个按钮颜色完全统一）--------------------------
 st.markdown("""
 <style>
     /* 全局背景与字体 */
@@ -122,7 +122,7 @@ st.markdown("""
         font-weight: 700;
     }
     
-    /* 按钮样式 */
+    /* 按钮样式（两个按钮完全统一的核心样式） */
     .stButton>button {
         background: linear-gradient(135deg, #165DFF 0%, #3b82f6 100%);
         color: white;
@@ -142,7 +142,7 @@ st.markdown("""
         background: linear-gradient(135deg, #0e4bcc 0%, #2563eb 100%);
     }
     
-    /* 彻底修复上传按钮看不清的问题 */
+    /* 上传按钮和绑定按钮完全统一（核心修改） */
     .stFileUploader > div {
         background: rgba(255,255,255,0.05);
         border: 2px dashed rgba(22, 93, 255, 0.5);
@@ -155,15 +155,24 @@ st.markdown("""
         border-color: #165DFF;
         background: rgba(22, 93, 255, 0.1);
     }
+    /* 上传按钮和主按钮完全一样的蓝色渐变 */
     .stFileUploader > div > button {
         background: linear-gradient(135deg, #165DFF 0%, #3b82f6 100%);
-        color: white;
+        color: white !important;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         width: 100%;
         font-weight: 600;
         margin-top: 0.5rem;
+        box-shadow: 0 4px 20px rgba(22, 93, 255, 0.4);
+        transition: all 0.3s ease;
     }
+    .stFileUploader > div > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(22, 93, 255, 0.6);
+        background: linear-gradient(135deg, #0e4bcc 0%, #2563eb 100%);
+    }
+    /* 上传按钮文字改成白色 */
     .stFileUploader > div > span {
         color: rgba(255,255,255,0.8);
         font-size: 0.85rem;
@@ -472,7 +481,7 @@ elif page == "📡 实时健康监测":
             st.write("**🚨 分级报警**")
             st.caption("针对不同风险等级，触发对应级别的报警与干预建议，避免漏报误报")
 
-# -------------------------- 3. 数据同步中心（彻底重构·视觉拉满版）--------------------------
+# -------------------------- 3. 数据同步中心 --------------------------
 elif page == "📊 数据同步中心":
     st.markdown('<p class="main-title">📊 多源健康数据同步中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">打通可穿戴设备、体检报告、居家检测全维度数据，打破健康数据孤岛</p>', unsafe_allow_html=True)
@@ -525,7 +534,7 @@ elif page == "📊 数据同步中心":
             st.write("**OCR识别准确率**")
             st.progress(98, text="98%")
             st.divider()
-            # 上传按钮（彻底修复，清晰可见）
+            # 上传按钮（和绑定按钮完全一样的蓝色）
             uploaded_file = st.file_uploader("上传新的体检报告", type=["pdf", "png", "jpg"], label_visibility="collapsed")
             if uploaded_file is not None:
                 with st.spinner("正在OCR识别并解析报告..."):
