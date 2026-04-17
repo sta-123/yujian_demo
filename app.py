@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 顶级玻璃拟态CSS（修复渲染空白问题）--------------------------
+# -------------------------- 核心CSS（修复按钮看不清+排版规整）--------------------------
 st.markdown("""
 <style>
     /* 全局背景与字体 */
@@ -25,33 +25,32 @@ st.markdown("""
         background-attachment: fixed;
     }
     
-    /* 玻璃拟态容器核心样式（修复空白） */
+    /* 玻璃拟态容器（统一规整排版） */
     div[data-testid="stVerticalBlock"] > div[class*="stContainer"] {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 16px;
-        padding: 1.8rem;
+        padding: 1.5rem;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
         margin-bottom: 1.5rem;
     }
     
     div[data-testid="stVerticalBlock"] > div[class*="stContainer"]:hover {
-        transform: translateY(-4px);
+        transform: translateY(-2px);
         box-shadow: 0 12px 40px rgba(22, 93, 255, 0.2);
         border: 1px solid rgba(22, 93, 255, 0.3);
     }
     
-    /* 侧边栏玻璃拟态 */
+    /* 侧边栏样式 */
     [data-testid="stSidebar"] {
         background: rgba(15, 23, 42, 0.8);
         backdrop-filter: blur(30px);
         border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
     
-    /* 侧边栏品牌区 */
     .sidebar-brand {
         text-align: center;
         padding: 2rem 0;
@@ -74,19 +73,20 @@ st.markdown("""
         100% { background-position: 200% center; }
     }
     
-    /* 标题样式 */
+    /* 标题样式统一 */
     .main-title {
         color: #ffffff;
         font-weight: 700;
-        font-size: 2.2rem;
+        font-size: 2rem;
         letter-spacing: -0.5px;
         margin-bottom: 0.5rem;
     }
     
     .subtitle {
         color: rgba(255, 255, 255, 0.6);
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 400;
+        margin-bottom: 1.5rem;
     }
     
     /* 指标卡片样式 */
@@ -95,19 +95,19 @@ st.markdown("""
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1.2rem;
         color: white;
     }
     
     [data-testid="stMetric"] label {
         color: rgba(255, 255, 255, 0.6) !important;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 500;
     }
     
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
         color: #ffffff !important;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 700;
     }
     
@@ -116,18 +116,38 @@ st.markdown("""
         background: linear-gradient(135deg, #165DFF 0%, #3b82f6 100%);
         color: white;
         border: none;
-        border-radius: 12px;
-        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        padding: 0.6rem 1.5rem;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.95rem;
         box-shadow: 0 4px 20px rgba(22, 93, 255, 0.4);
         transition: all 0.3s ease;
+        width: 100%;
     }
     
     .stButton>button:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 30px rgba(22, 93, 255, 0.6);
         background: linear-gradient(135deg, #0e4bcc 0%, #2563eb 100%);
+    }
+    
+    /* 修复上传按钮看不清的核心样式 */
+    .stFileUploader > div {
+        background: rgba(255,255,255,0.03);
+        border: 1px dashed rgba(255,255,255,0.2);
+        border-radius: 10px;
+        color: white;
+        padding: 1rem;
+    }
+    .stFileUploader > div > button {
+        background: rgba(22, 93, 255, 0.9);
+        color: white;
+        border: 1px solid rgba(22, 93, 255, 0.5);
+        border-radius: 8px;
+        width: 100%;
+    }
+    .stFileUploader > div > span {
+        color: rgba(255,255,255,0.7);
     }
     
     /* 文本颜色统一 */
@@ -140,14 +160,14 @@ st.markdown("""
         background: rgba(255, 255, 255, 0.05) !important;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px;
+        border-radius: 10px;
     }
     
     /* 表格样式 */
     [data-testid="stDataFrame"] {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
+        border-radius: 10px;
     }
     
     /* 分隔线样式 */
@@ -155,17 +175,12 @@ st.markdown("""
         border: none;
         height: 1px;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        margin: 2.5rem 0;
+        margin: 1.5rem 0;
     }
-    
-    /* 隐藏Streamlit默认元素 */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
     
     /* 标签页样式 */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 1rem;
+        gap: 0.8rem;
     }
     .stTabs [data-baseweb="tab"] {
         background: rgba(255,255,255,0.03);
@@ -177,6 +192,17 @@ st.markdown("""
         background: rgba(22, 93, 255, 0.3);
         border-bottom: 2px solid #165DFF;
     }
+    
+    /* 进度条样式 */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #165DFF, #3b82f6);
+        border-radius: 10px;
+    }
+    
+    /* 隐藏Streamlit默认元素 */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -202,7 +228,8 @@ with st.sidebar:
     st.divider()
     st.caption("© 2026 PREHEALTH MED·AI | All Rights Reserved")
 
-# -------------------------- 全局数据初始化 --------------------------
+# -------------------------- 全局数据初始化（彻底修复KeyError报错）--------------------------
+# 用户基础数据
 if 'user_data' not in st.session_state:
     st.session_state.user_data = {
         "age": 32,
@@ -211,7 +238,10 @@ if 'user_data' not in st.session_state:
         "lifestyle": "熬夜（日均睡眠6小时）、久坐、工作压力大",
         "health_score": 58
     }
+# 强制确保健康评分存在，彻底避免KeyError
+st.session_state.user_data.setdefault("health_score", 58)
 
+# 14天健康时序数据
 if 'health_data' not in st.session_state:
     dates = [datetime.now() - timedelta(days=i) for i in range(14, 0, -1)]
     base_hr = np.random.randint(65, 75, 11)
@@ -228,6 +258,7 @@ if 'health_data' not in st.session_state:
         "血氧饱和度": np.round(np.random.uniform(96, 99, 14), 1)
     })
 
+# 风险评估结果
 if 'risk_result' not in st.session_state:
     st.session_state.risk_result = (
         "极高危",
@@ -248,11 +279,10 @@ def predict_risk(health_data, user_info):
     else:
         return "低危", "#00c853", "当前健康指标平稳，无显著异常风险，继续保持良好生活习惯。", 92
 
-# -------------------------- 1. 系统首页 --------------------------
+# -------------------------- 1. 系统首页（规整排版，无杂乱内容）--------------------------
 if page == "🏠 系统首页":
     st.markdown('<p class="main-title">🩺 预健·MED·AI 中青年急重症智能预警系统</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">基于多模态时序大数据与深度学习，实现急重症的早发现、早预警、早干预</p>', unsafe_allow_html=True)
-    st.divider()
     
     # 顶部核心指标看板
     col1, col2, col3, col4 = st.columns(4)
@@ -267,30 +297,35 @@ if page == "🏠 系统首页":
 
     st.divider()
     
-    # 主体内容区
+    # 主体内容区（双列规整布局）
     col_main1, col_main2 = st.columns([1, 2])
     
     with col_main1:
-        # 用户健康档案卡片（内容拉满，不再空白）
+        # 用户健康档案卡片
         with st.container():
             st.subheader("👤 用户健康档案")
-            st.progress(st.session_state.user_data['health_score'], text=f"健康评分：{st.session_state.user_data['health_score']}/100")
+            # 健康评分进度条（修复报错）
+            health_score = st.session_state.user_data['health_score']
+            st.progress(health_score, text=f"健康评分：{health_score}/100")
             st.divider()
-            st.write(f"**年龄**：{st.session_state.user_data['age']}岁")
-            st.write(f"**性别**：{st.session_state.user_data['gender']}")
-            st.write(f"**家族史**：{st.session_state.user_data['family_history']}")
-            st.write(f"**生活习惯**：{st.session_state.user_data['lifestyle']}")
-            st.divider()
-            st.write("**已同步数据维度**：")
+            # 基础信息规整排版
             col_a, col_b = st.columns(2)
-            col_a.write("✅ 可穿戴设备数据")
-            col_a.write("✅ 体检报告数据")
-            col_b.write("✅ 居家检测数据")
-            col_b.write("✅ 病史数据")
-            
+            col_a.write(f"**年龄**：{st.session_state.user_data['age']}岁")
+            col_a.write(f"**性别**：{st.session_state.user_data['gender']}")
+            col_b.write(f"**家族史**：{st.session_state.user_data['family_history']}")
+            col_b.write(f"**生活习惯**：{st.session_state.user_data['lifestyle']}")
             st.divider()
-            if st.button("🚀 启动AI深度风险评估", type="primary", use_container_width=True):
-                with st.spinner("正在融合多源健康数据，AI模型深度分析中..."):
+            # 数据同步状态
+            st.write("✅ 已同步数据维度：")
+            col_c, col_d = st.columns(2)
+            col_c.write("• 可穿戴设备数据")
+            col_c.write("• 体检报告数据")
+            col_d.write("• 居家检测数据")
+            col_d.write("• 病史数据")
+            st.divider()
+            # AI评估按钮
+            if st.button("🚀 启动AI深度风险评估", type="primary"):
+                with st.spinner("正在融合多源健康数据，AI模型分析中..."):
                     time.sleep(2)
                     risk_level, color, reason, score = predict_risk(st.session_state.health_data, st.session_state.user_data)
                     st.session_state.risk_result = (risk_level, color, reason)
@@ -298,7 +333,7 @@ if page == "🏠 系统首页":
                     st.success("✅ 风险评估完成！")
     
     with col_main2:
-        # 健康趋势卡片（内容拉满，不再空白）
+        # 健康趋势卡片
         with st.container():
             st.subheader("📈 核心健康指标趋势（近14天）")
             tab1, tab2 = st.tabs(["血压变化趋势", "心率变化趋势"])
@@ -306,20 +341,20 @@ if page == "🏠 系统首页":
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["收缩压", "舒张压"]],
                     color=["#ff4b4b", "#ff9800"],
-                    height=300
+                    height=320
                 )
                 st.caption("* 红色为收缩压，橙色为舒张压，正常参考值：90-140/60-90 mmHg")
             with tab2:
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["静息心率", "夜间心率"]],
                     color=["#165DFF", "#7b61ff"],
-                    height=300
+                    height=320
                 )
                 st.caption("* 蓝色为日间静息心率，紫色为夜间静息心率，正常参考值：60-100 次/分")
 
     st.divider()
     
-    # 风险概览卡片（内容拉满，不再空白）
+    # 风险概览卡片
     with st.container():
         st.subheader("⚠️ 当前健康风险概览")
         risk_level, color, reason = st.session_state.risk_result
@@ -336,7 +371,6 @@ if page == "🏠 系统首页":
 elif page == "📡 实时健康监测":
     st.markdown('<p class="main-title">📡 实时健康数据动态监测中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">模拟可穿戴设备7×24小时实时采集，AI自动识别异常并触发分级报警</p>', unsafe_allow_html=True)
-    st.divider()
 
     # 实时数据看板
     col1, col2, col3, col4 = st.columns(4)
@@ -354,9 +388,9 @@ elif page == "📡 实时健康监测":
     chart_placeholder = st.empty()
     alert_placeholder = st.empty()
 
-    # 实时监测卡片（内容拉满）
+    # 实时监测卡片
     with st.container():
-        if st.button("▶️ 启动实时监测", type="primary", use_container_width=True):
+        if st.button("▶️ 启动实时监测", type="primary"):
             realtime_history = pd.DataFrame({"时间": [], "实时心率": [], "收缩压": [], "血氧饱和度": []})
 
             for i in range(60):
@@ -395,7 +429,7 @@ elif page == "📡 实时健康监测":
                 time.sleep(0.5)
     
     st.divider()
-    # 监测说明卡片（内容拉满）
+    # 监测说明卡片
     with st.container():
         st.subheader("📌 功能说明")
         col_a, col_b, col_c = st.columns(3)
@@ -409,27 +443,25 @@ elif page == "📡 实时健康监测":
             st.write("**🚨 分级报警**")
             st.caption("针对不同风险等级，触发对应级别的报警与干预建议，避免漏报误报")
 
-# -------------------------- 3. 数据同步中心（彻底修复空白，内容拉满）--------------------------
+# -------------------------- 3. 数据同步中心（修复上传按钮看不清）--------------------------
 elif page == "📊 数据同步中心":
     st.markdown('<p class="main-title">📊 多源健康数据同步中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">打通可穿戴设备、体检报告、居家检测全维度数据，打破健康数据孤岛</p>', unsafe_allow_html=True)
-    st.divider()
     
-    # 三个核心功能卡片（彻底填充内容，不再空白）
+    # 三个核心功能卡片（规整排版）
     col1, col2, col3 = st.columns(3)
     with col1:
         with st.container():
             st.subheader("⌚ 可穿戴设备同步")
             st.divider()
             st.write("**已支持设备品牌**：")
-            st.write("✅ 苹果Apple Watch | ✅ 华为Watch | ✅ 小米手环")
-            st.write("✅ OPPO Watch | ✅ 荣耀手环 | ✅ 华米Amazfit")
+            st.caption("✅ 苹果Apple Watch | ✅ 华为Watch | ✅ 小米手环\n✅ OPPO Watch | ✅ 荣耀手环 | ✅ 华米Amazfit")
             st.divider()
-            st.write("**已同步数据**：")
-            st.metric("累计同步天数", "14天")
-            st.metric("数据条目", "2016条")
+            col_a, col_b = st.columns(2)
+            col_a.metric("累计同步天数", "14天")
+            col_b.metric("数据条目", "2016条")
             st.divider()
-            if st.button("绑定/同步设备", key="wearable", use_container_width=True):
+            if st.button("绑定/同步设备", key="wearable"):
                 with st.spinner("正在连接设备..."):
                     time.sleep(1)
                     st.success("✅ 设备连接成功！")
@@ -444,10 +476,11 @@ elif page == "📊 数据同步中心":
             st.write("**支持格式**：PDF、JPG、PNG图片")
             st.write("**支持机构**：全国90%以上体检机构、公立医院体检中心")
             st.divider()
-            st.write("**已解析报告**：")
-            st.metric("累计解析报告", "2份")
-            st.metric("提取核心指标", "128项")
+            col_a, col_b = st.columns(2)
+            col_a.metric("累计解析报告", "2份")
+            col_b.metric("提取核心指标", "128项")
             st.divider()
+            # 修复后的上传按钮，清晰可见
             uploaded_file = st.file_uploader("上传新的体检报告", type=["pdf", "png", "jpg"], label_visibility="collapsed")
             if uploaded_file is not None:
                 with st.spinner("正在OCR识别并解析报告..."):
@@ -462,24 +495,24 @@ elif page == "📊 数据同步中心":
             st.write("**支持录入指标**：血压、血糖、心率、尿酸、体重")
             st.write("**数据用途**：补充日常监测数据，优化风险预测精度")
             st.divider()
-            st.write("**今日已录入**：")
-            st.metric("数据条目", "3条")
-            st.metric("连续录入天数", "7天")
+            col_a, col_b = st.columns(2)
+            col_a.metric("今日已录入", "3条")
+            col_b.metric("连续录入天数", "7天")
             st.divider()
             new_bp_s = st.number_input("今日收缩压（mmHg）", min_value=80, max_value=200, value=135)
             new_bp_d = st.number_input("今日舒张压（mmHg）", min_value=50, max_value=120, value=88)
             new_hr = st.number_input("今日静息心率（次/分）", min_value=50, max_value=120, value=84)
-            if st.button("保存今日数据", key="home", use_container_width=True):
+            if st.button("保存今日数据", key="home"):
                 st.success("✅ 数据已保存！已同步更新至风险预测模型")
     
     st.divider()
-    # 数据预览卡片（内容拉满）
+    # 数据预览卡片
     with st.container():
         st.subheader("📋 已同步健康数据预览")
         st.dataframe(st.session_state.health_data, use_container_width=True, height=300)
         st.caption("* 以上为近14天的核心健康指标时序数据")
 
-# -------------------------- 4. 风险预警中心（内容拉满，不再空白）--------------------------
+# -------------------------- 4. 风险预警中心 --------------------------
 elif page == "⚠️ 风险预警中心":
     st.markdown('<p class="main-title">⚠️ 隐匿性急重症智能风险预警报告</p>', unsafe_allow_html=True)
     st.divider()
@@ -521,7 +554,7 @@ elif page == "⚠️ 风险预警中心":
             col_b.metric("血压异常", "35%")
             col_c.metric("心率异常", "20%")
             col_d.metric("生活习惯", "5%")
-            # 风险雷达图占位（可视化填充）
+            # 风险可视化
             st.bar_chart(
                 pd.DataFrame({
                     "风险维度": ["家族史", "血压", "心率", "生活习惯", "既往病史"],
@@ -533,7 +566,7 @@ elif page == "⚠️ 风险预警中心":
 
     st.divider()
     
-    # 就医指导卡片（内容拉满）
+    # 就医指导卡片
     with st.container():
         st.subheader("🏥 精准就医指导与干预建议")
         if risk_level == "极高危":
@@ -560,14 +593,14 @@ elif page == "⚠️ 风险预警中心":
             st.success("【低风险健康维护】")
             st.write("保持当前良好的生活习惯，每月上传1-2次居家检测数据，每季度进行一次全面风险评估，按年度完成常规体检。")
 
-# -------------------------- 5. 健康管理中心（内容拉满，不再空白）--------------------------
+# -------------------------- 5. 健康管理中心 --------------------------
 elif page == "💊 健康管理中心":
     st.markdown('<p class="main-title">💊 个性化主动健康管理方案</p>', unsafe_allow_html=True)
     st.divider()
 
     col1, col2 = st.columns(2)
     with col1:
-        # 随访计划卡片（内容拉满）
+        # 随访计划卡片
         with st.container():
             st.subheader("📅 个性化随访计划")
             st.progress(20, text="本周完成进度：1/5")
@@ -590,17 +623,17 @@ elif page == "💊 健康管理中心":
         
         st.divider()
         
-        # 健康科普卡片（内容拉满）
+        # 健康科普卡片
         with st.container():
             st.subheader("📚 今日健康科普")
             st.info("【心源性猝死的3个早期隐匿信号】\n1. 不明原因的持续疲劳乏力，休息后无法缓解；\n2. 夜间静息心率持续升高超过10%，波动幅度大；\n3. 活动后胸闷气短加重，伴随左肩、后背放射性疼痛。")
             st.divider()
-            st.write("**推荐阅读**：")
-            st.caption("《中国心源性猝死防治指南2024》")
-            st.caption("《中青年高血压管理专家共识》")
+            st.write("**权威参考指南**：")
+            st.caption("• 《中国心源性猝死防治指南2024》")
+            st.caption("• 《中青年高血压管理专家共识》")
 
     with col2:
-        # 干预方案卡片（内容拉满）
+        # 干预方案卡片
         with st.container():
             st.subheader("🥗 个体化生活方式干预方案")
             st.divider()
@@ -617,7 +650,7 @@ elif page == "💊 健康管理中心":
         
         st.divider()
         
-        # 提醒卡片（内容拉满）
+        # 提醒卡片
         with st.container():
             st.subheader("🔔 用药与复查提醒")
             st.divider()
@@ -625,10 +658,10 @@ elif page == "💊 健康管理中心":
             st.write("**复查提醒**：2026-XX-XX 心内科就诊，完善24小时动态心电图、冠脉CTA检查")
             st.write("**体检提醒**：2026-XX-XX 年度全面体检，重点关注心血管、血脂、血糖相关指标")
             st.divider()
-            if st.button("开启微信提醒", use_container_width=True):
+            if st.button("开启微信提醒"):
                 st.success("✅ 微信提醒已开启，将按时推送提醒消息")
 
     st.divider()
-    # 方案说明卡片（内容拉满）
+    # 方案说明卡片
     with st.container():
         st.info("📌 方案说明：本管理方案基于您的风险等级、健康数据、生活习惯，由AI模型自动生成，会根据您每日上传的监测数据动态调整，实现全周期闭环健康管理；所有建议均参考《中国心血管病防治指南》制定，仅供参考，具体诊疗请遵医嘱。")
