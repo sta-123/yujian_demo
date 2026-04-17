@@ -43,7 +43,7 @@ if 'health_data' not in st.session_state:
         "夜间心率": np.concatenate([base_hr - 8, abnormal_hr - 5]),
         "收缩压": np.concatenate([base_bp, abnormal_bp]),
         "舒张压": np.concatenate([np.random.randint(70, 80, 11), [82, 88, 92]]),
-        "血氧饱和度": np.random.uniform(96, 99, 14).round(1)
+        "血氧饱和度": np.round(np.random.uniform(96, 99, 14), 1)
     })
 
 # 风险评估结果（默认初始化，解决页面空白问题）
@@ -128,7 +128,7 @@ if page == "🏠 系统首页":
         st.warning(reason)
         st.info("👉 可点击左侧导航栏「风险预警中心」查看完整风险报告与就医指导")
 
-# -------------------------- 2. 实时健康监测（新增核心功能，满足实时检测要求） --------------------------
+# -------------------------- 2. 实时健康监测（修复兼容问题） --------------------------
 elif page == "📡 实时健康监测":
     st.title("📡 实时健康数据动态监测")
     st.caption("模拟可穿戴设备实时采集心率、血压、血氧数据，异常指标自动报警")
@@ -162,12 +162,12 @@ elif page == "📡 实时健康监测":
             if i < 30:
                 new_hr = np.random.randint(72, 78)
                 new_bp_s = np.random.randint(125, 132)
-                new_spo2 = np.random.uniform(97, 99).round(1)
+                new_spo2 = round(np.random.uniform(97, 99), 1)
                 is_abnormal = False
             else:
                 new_hr = np.random.randint(95, 110)
                 new_bp_s = np.random.randint(145, 160)
-                new_spo2 = np.random.uniform(93, 95).round(1)
+                new_spo2 = round(np.random.uniform(93, 95), 1)
                 is_abnormal = True
                 st.session_state.realtime_data["is_abnormal"] = True
 
@@ -253,7 +253,7 @@ elif page == "📊 数据同步中心":
     st.subheader("📋 已同步健康数据预览")
     st.dataframe(st.session_state.health_data, use_container_width=True, height=300)
 
-# -------------------------- 4. 风险预警中心（解决空白问题） --------------------------
+# -------------------------- 4. 风险预警中心 --------------------------
 elif page == "⚠️ 风险预警中心":
     st.title("⚠️ 隐匿性急重症智能风险预警报告")
     st.divider()
@@ -306,7 +306,7 @@ elif page == "⚠️ 风险预警中心":
             st.write("2. 每月上传1-2次居家检测数据，每季度进行一次全面风险评估；")
             st.write("3. 按年度完成常规体检，及时更新体检报告数据。")
 
-# -------------------------- 5. 健康管理中心（解决空白问题） --------------------------
+# -------------------------- 5. 健康管理中心 --------------------------
 elif page == "💊 健康管理中心":
     st.title("💊 个性化主动健康管理方案")
     st.divider()
