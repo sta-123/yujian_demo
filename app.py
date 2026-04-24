@@ -183,6 +183,21 @@ st.markdown("""
         color: #ffffff;
     }
     
+    /* 单选/下拉框样式适配 */
+    [data-baseweb="select"] {
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+    }
+    [data-baseweb="radio"] {
+        color: white;
+    }
+    [data-testid="stTextArea"] textarea {
+        background: rgba(255,255,255,0.05);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+    }
+    
     /* 警告/信息框样式 */
     .stAlert {
         background: rgba(255, 255, 255, 0.05) !important;
@@ -268,7 +283,7 @@ with st.sidebar:
     st.caption("© 2026 PREHEALTH MED·AI | All Rights Reserved")
 
 # -------------------------- 全局数据初始化（彻底避免报错）--------------------------
-# 用户基础数据
+# 用户基础数据（可编辑，全局同步）
 if 'user_data' not in st.session_state:
     st.session_state.user_data = {
         "age": 32,
@@ -277,13 +292,13 @@ if 'user_data' not in st.session_state:
         "lifestyle": "熬夜（日均睡眠6小时）、久坐、工作压力大",
         "health_score": 58
     }
+# 确保健康评分字段存在
 st.session_state.user_data.setdefault("health_score", 58)
 
 # 14天健康时序数据
 if 'health_data' not in st.session_state:
     dates = [datetime.now() - timedelta(days=i) for i in range(14, 0, -1)]
     base_hr = np.random.randint(65, 75, 11)
-    # 修正：将列表改为numpy数组，支持向量运算
     abnormal_hr = np.array([78, 82, 85])
     base_bp = np.random.randint(115, 130, 11)
     abnormal_bp = np.array([135, 140, 145])
@@ -305,20 +320,66 @@ if 'risk_result' not in st.session_state:
         "近3天静息心率持续升高15%，合并血压昼夜节律异常，结合心脑血管家族史，心源性猝死、隐匿性冠心病风险显著升高。"
     )
 
-# -------------------------- 风险预测核心函数 --------------------------
+# -------------------------- 风险预测核心函数（优化：联动用户编辑的信息）--------------------------
 def predict_risk(health_data, user_info):
     recent_hr = health_data["静息心率"].tail(3).values
     recent_bp = health_data["收缩压"].tail(3).values
     has_family_history = "心脑血管" in user_info["family_history"]
+    age = user_info["age"]
+    lifestyle = user_info["lifestyle"]
     
-    if (np.all(np.diff(recent_hr) > 0) and np.mean(recent_bp) > 140) or has_family_history:
-        return "极高危", "#ff4b4b", "近3天静息心率持续升高15%，合并血压昼夜节律异常，结合心脑血管家族史，心源性猝死、隐匿性冠心病风险显著升高。", 58
-    elif np.mean(recent_hr) > 80 or np.mean(recent_bp) > 135:
-        return "中危", "#ff9800", "近期静息心率与血压持续处于高位，存在隐匿性心血管异常风险，建议加强监测。", 75
+    # 风险权重计算（联动用户编辑的所有信息）
+    base_risk = 0
+    risk_reason = ""
+    
+    # 1. 家族史权重（最高40%）
+    if has_family_history:
+        base_risk += 40
+        risk_reason += "结合心脑血管家族史，遗传风险较高；"
+    # 2. 血压异常权重（35%）
+    if np.mean(recent_bp) > 140:
+        base_risk += 35
+        risk_reason += "近3天收缩压持续高于140mmHg，血压昼夜节律异常；"
+    elif np.mean(recent_bp) > 135:
+        base_risk += 20
+        risk_reason += "近期收缩压持续处于高位，存在血压异常风险；"
+    # 3. 心率异常权重（20%）
+    if np.all(np.diff(recent_hr) > 0) and np.mean(recent_hr) > 80:
+        base_risk += 20
+        risk_reason += "近3天静息心率持续升高15%以上，心率变异性异常；"
+    elif np.mean(recent_hr) > 80:
+        base_risk += 10
+        risk_reason += "近期静息心率持续高于80次/分，存在心血管异常信号；"
+    # 4. 年龄权重（5%）
+    if age >= 40:
+        base_risk += 5
+        risk_reason += "年龄超过40岁，心脑血管疾病发病风险升高；"
+    # 5. 生活习惯权重（额外加减分）
+    if "熬夜" in lifestyle or "久坐" in lifestyle or "压力大" in lifestyle:
+        base_risk += 5
+        risk_reason += "不良生活习惯进一步提升风险；"
+    
+    # 健康评分计算
+    health_score = 100 - base_risk
+    health_score = max(30, min(95, health_score)) # 限制评分范围
+    
+    # 风险等级判定
+    if base_risk >= 60:
+        risk_level = "极高危"
+        color = "#ff4b4b"
+        full_reason = f"{risk_reason}综合判定心源性猝死、隐匿性冠心病风险显著升高。"
+    elif base_risk >= 40:
+        risk_level = "中危"
+        color = "#ff9800"
+        full_reason = f"{risk_reason}存在隐匿性心血管异常风险，建议加强监测。"
     else:
-        return "低危", "#00c853", "当前健康指标平稳，无显著异常风险，继续保持良好生活习惯。", 92
+        risk_level = "低危"
+        color = "#00c853"
+        full_reason = "当前健康指标平稳，无显著异常风险，继续保持良好生活习惯。"
+    
+    return risk_level, color, full_reason, health_score
 
-# -------------------------- 1. 系统首页 --------------------------
+# -------------------------- 1. 系统首页（核心修改：健康档案可编辑）--------------------------
 if page == "🏠 系统首页":
     st.markdown('<p class="main-title">🩺 预健·MED·AI 中青年急重症智能预警系统</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">基于多模态时序大数据与深度学习，实现急重症的早发现、早预警、早干预</p>', unsafe_allow_html=True)
@@ -326,7 +387,7 @@ if page == "🏠 系统首页":
     # 顶部核心指标看板
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("当前风险等级", "极高危", delta="需紧急关注", delta_color="inverse")
+        st.metric("当前风险等级", st.session_state.risk_result[0], delta="需紧急关注" if st.session_state.risk_result[0] in ["极高危", "中危"] else "正常", delta_color="inverse")
     with col2:
         st.metric("覆盖并发症", "5大类28项")
     with col3:
@@ -340,19 +401,57 @@ if page == "🏠 系统首页":
     col_main1, col_main2 = st.columns([1, 2])
     
     with col_main1:
-        # 用户健康档案卡片
+        # 用户健康档案卡片（全字段可编辑）
         with st.container():
-            st.markdown('<p class="card-title">👤 用户健康档案</p>', unsafe_allow_html=True)
-            # 健康评分进度条
+            st.markdown('<p class="card-title">👤 用户健康档案（可编辑）</p>', unsafe_allow_html=True)
+            
+            # 健康评分进度条（实时联动）
             health_score = st.session_state.user_data['health_score']
             st.progress(health_score, text=f"健康评分：{health_score}/100")
             st.divider()
-            # 基础信息规整排版
+            
+            # 可编辑基础信息（双列布局）
             col_a, col_b = st.columns(2)
-            col_a.write(f"**年龄**：{st.session_state.user_data['age']}岁")
-            col_a.write(f"**性别**：{st.session_state.user_data['gender']}")
-            col_b.write(f"**家族史**：{st.session_state.user_data['family_history']}")
-            col_b.write(f"**生活习惯**：{st.session_state.user_data['lifestyle']}")
+            with col_a:
+                # 年龄编辑
+                new_age = st.number_input(
+                    "年龄",
+                    min_value=25,
+                    max_value=50,
+                    value=st.session_state.user_data['age'],
+                    step=1,
+                    help="目标人群25-50岁中青年"
+                )
+                # 性别编辑
+                new_gender = st.radio(
+                    "性别",
+                    options=["男", "女"],
+                    index=0 if st.session_state.user_data['gender'] == "男" else 1,
+                    horizontal=True
+                )
+            with col_b:
+                # 家族史编辑
+                new_family_history = st.selectbox(
+                    "家族史",
+                    options=["有心脑血管家族史", "无相关家族史"],
+                    index=0 if "有心脑血管" in st.session_state.user_data['family_history'] else 1
+                )
+                # 生活习惯编辑
+                new_lifestyle = st.text_area(
+                    "生活习惯",
+                    value=st.session_state.user_data['lifestyle'],
+                    height=80,
+                    help="可编辑修改您的作息、运动、工作压力等情况"
+                )
+            
+            # 实时同步编辑内容到全局session_state
+            st.session_state.user_data.update({
+                "age": new_age,
+                "gender": new_gender,
+                "family_history": new_family_history,
+                "lifestyle": new_lifestyle
+            })
+            
             st.divider()
             # 数据同步状态
             st.write("✅ 已同步数据维度：")
@@ -362,14 +461,20 @@ if page == "🏠 系统首页":
             col_d.write("• 居家检测数据")
             col_d.write("• 病史数据")
             st.divider()
-            # AI评估按钮
+            
+            # AI评估按钮（用最新编辑的用户数据计算）
             if st.button("🚀 启动AI深度风险评估", type="primary"):
                 with st.spinner("正在融合多源健康数据，AI模型分析中..."):
                     time.sleep(2)
-                    risk_level, color, reason, score = predict_risk(st.session_state.health_data, st.session_state.user_data)
+                    # 调用风险预测函数，传入最新的用户数据
+                    risk_level, color, reason, score = predict_risk(
+                        st.session_state.health_data,
+                        st.session_state.user_data
+                    )
+                    # 更新全局结果
                     st.session_state.risk_result = (risk_level, color, reason)
                     st.session_state.user_data['health_score'] = score
-                    st.success("✅ 风险评估完成！")
+                    st.success("✅ 风险评估完成！已根据您的档案信息更新结果")
     
     with col_main2:
         # 健康趋势卡片
@@ -400,8 +505,10 @@ if page == "🏠 系统首页":
         col_a, col_b = st.columns([1, 3])
         with col_a:
             st.markdown(f"<h2 style='text-align: center; color: {color}; font-weight: bold; font-size: 2.5rem;'>{risk_level}</h2>", unsafe_allow_html=True)
-            st.progress(85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15)
-            st.caption("风险指数：85/100")
+            # 风险进度条联动风险等级
+            risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
+            st.progress(risk_index)
+            st.caption(f"风险指数：{risk_index}/100")
         with col_b:
             st.warning(reason)
             st.info("💡 提示：可点击左侧导航栏「风险预警中心」查看完整就医指导与干预方案")
@@ -499,23 +606,71 @@ elif page == "📊 数据同步中心":
             st.write("**已支持设备品牌**")
             st.caption("✅ 苹果Apple Watch | ✅ 华为Watch\n✅ 小米手环 | ✅ OPPO Watch\n✅ 荣耀手环 | ✅ 华米Amazfit")
             st.divider()
-            # 数据统计（双列指标）
-            col_a, col_b = st.columns(2)
-            col_a.metric("累计同步天数", "14天")
-            col_b.metric("数据条目", "2016条")
+
+            # 1. 选择设备品牌
+            device_brand = st.selectbox("选择你的设备品牌", ["请选择", "苹果Apple", "华为Huawei", "小米Xiaomi", "OPPO", "荣耀", "其他"])
+            # 2. 绑定授权模拟
+            if device_brand != "请选择":
+                if st.button(f"🔗 授权绑定{device_brand}设备", key="wearable_bind"):
+                    with st.spinner(f"正在跳转{device_brand}开放平台授权页面..."):
+                        time.sleep(1.5)
+                        st.success(f"✅ {device_brand}账号授权成功！")
+                        st.info("请上传从设备APP导出的健康时序数据CSV文件，完成数据同步")
+
             st.divider()
-            # 同步进度条
-            st.write("**同步进度**")
-            st.progress(100, text="已完成全量数据同步")
+            # 3. 真实CSV数据上传解析（核心：支持你自己的手机数据）
+            st.write("**设备健康数据同步**")
+            wearable_file = st.file_uploader("上传设备导出的CSV健康数据", type=["csv"], key="wearable_file", label_visibility="collapsed")
+            
+            # 数据解析逻辑（适配主流设备导出格式）
+            if wearable_file is not None:
+                with st.spinner("正在解析数据、同步至健康模型..."):
+                    try:
+                        # 读取用户上传的真实数据
+                        user_wearable_data = pd.read_csv(wearable_file)
+                        # 自动识别时间、心率、血压核心列（适配苹果/华为/小米的导出格式）
+                        time_col = None
+                        hr_col = None
+                        bp_s_col = None
+                        for col in user_wearable_data.columns:
+                            col_lower = col.lower()
+                            if "时间" in col or "date" in col_lower or "time" in col_lower:
+                                time_col = col
+                            elif "心率" in col or "heart" in col_lower or "hr" in col_lower:
+                                hr_col = col
+                            elif "收缩压" in col or "高压" in col or "systolic" in col_lower:
+                                bp_s_col = col
+                        
+                        # 同步数据到全局状态，替换模拟数据，实现真实数据联动
+                        if time_col and hr_col:
+                            st.session_state.health_data = user_wearable_data.rename(columns={
+                                time_col: "日期",
+                                hr_col: "静息心率",
+                                bp_s_col: "收缩压" if bp_s_col else "收缩压"
+                            })
+                            # 自动重新评估风险
+                            risk_level, color, reason, score = predict_risk(st.session_state.health_data, st.session_state.user_data)
+                            st.session_state.risk_result = (risk_level, color, reason)
+                            st.session_state.user_data['health_score'] = score
+                            
+                            st.success("✅ 数据同步完成！已更新至AI风险模型")
+                            # 显示同步结果
+                            col_a, col_b = st.columns(2)
+                            col_a.metric("同步数据天数", f"{len(st.session_state.health_data)}天")
+                            col_b.metric("数据条目", f"{len(st.session_state.health_data)}条")
+                        else:
+                            st.warning("⚠️ 未识别到核心数据列，请确保CSV包含时间、心率相关列")
+                    except Exception as e:
+                        st.error(f"数据解析失败：{str(e)}，请使用设备官方导出的标准CSV文件")
+
             st.divider()
-            # 交互按钮
-            if st.button("🔗 绑定/同步设备", key="wearable"):
-                with st.spinner("正在连接设备..."):
-                    time.sleep(1)
-                    st.success("✅ 设备连接成功！")
-                    st.info("正在同步过去14天的健康数据...")
-                    time.sleep(1.5)
-                    st.success("✅ 数据同步完成！已更新至风险模型")
+            # 同步进度&状态
+            st.write("**当前同步状态**")
+            if len(st.session_state.health_data) > 0:
+                st.progress(100, text="已完成全量数据同步")
+                st.caption(f"已同步{len(st.session_state.health_data)}天健康时序数据")
+            else:
+                st.progress(0, text="未同步数据")
 
     # 卡片2：体检报告智能解析
     with col2:
@@ -581,14 +736,16 @@ elif page == "⚠️ 风险预警中心":
     st.divider()
 
     risk_level, color, reason = st.session_state.risk_result
+    user_data = st.session_state.user_data
 
     col1, col2 = st.columns([1, 2])
     with col1:
         with st.container():
             st.markdown('<p class="card-title">🎯 最终风险评级</p>', unsafe_allow_html=True)
             st.markdown(f"<h1 style='text-align: center; color: {color}; font-weight: bold; font-size: 3rem;'>{risk_level}</h1>", unsafe_allow_html=True)
-            st.progress(85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15)
-            st.caption("风险指数：85/100")
+            risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
+            st.progress(risk_index)
+            st.caption(f"风险指数：{risk_index}/100")
             st.divider()
             st.metric("预警时间", datetime.now().strftime("%Y-%m-%d %H:%M"))
             st.metric("覆盖并发症", "5大类28项")
@@ -611,9 +768,11 @@ elif page == "⚠️ 风险预警中心":
                 hide_index=True
             )
             st.divider()
-            st.write("**风险权重占比**：")
+            st.write("**风险权重占比**")
+            # 风险权重联动用户编辑的家族史
+            family_weight = 40 if "有心脑血管" in user_data["family_history"] else 10
             col_a, col_b, col_c, col_d = st.columns(4)
-            col_a.metric("家族史", "40%")
+            col_a.metric("家族史", f"{family_weight}%")
             col_b.metric("血压异常", "35%")
             col_c.metric("心率异常", "20%")
             col_d.metric("生活习惯", "5%")
@@ -621,7 +780,7 @@ elif page == "⚠️ 风险预警中心":
             st.bar_chart(
                 pd.DataFrame({
                     "风险维度": ["家族史", "血压", "心率", "生活习惯", "既往病史"],
-                    "风险值": [85, 80, 75, 60, 30]
+                    "风险值": [family_weight, 80, 75, 60, 30]
                 }).set_index("风险维度"),
                 color="#ff4b4b",
                 height=200
