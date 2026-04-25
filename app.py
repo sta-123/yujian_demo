@@ -12,31 +12,30 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 简洁清晰版CSS --------------------------
+# -------------------------- 优化版CSS（高对比度+清晰层级） --------------------------
 st.markdown("""
 <style>
-    /* 全局背景与字体 */
+    /* 全局重置与基础样式 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
     html, body, [class*="css"] {
-        font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        color: #1e293b;
     }
     
+    /* 主背景 */
     .stApp {
-        background: #0f172a;
+        background-color: #f8fafc;
     }
     
-    /* 简洁清晰的模块卡片 */
-    .module-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* 侧边栏样式 */
+    /* 侧边栏优化 */
     [data-testid="stSidebar"] {
-        background: #1e293b;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        background-color: #ffffff;
+        border-right: 1px solid #e2e8f0;
     }
     
     .sidebar-brand {
@@ -52,44 +51,54 @@ st.markdown("""
         margin-bottom: 0.3rem;
     }
     
-    /* 标题样式 */
+    /* 主标题样式 */
     .main-title {
-        color: #ffffff;
+        color: #0f172a;
         font-weight: 700;
         font-size: 1.8rem;
         margin-bottom: 0.3rem;
     }
     
     .subtitle {
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
+    }
+    
+    /* 卡片模块样式 */
+    .module-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
     }
     
     .card-title {
         font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: #ffffff;
+        color: #0f172a;
     }
     
     /* 指标卡片样式 */
     [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 8px;
         padding: 1rem;
-        color: white;
+        color: #0f172a;
     }
     
     [data-testid="stMetric"] label {
-        color: rgba(255, 255, 255, 0.6) !important;
+        color: #64748b !important;
         font-size: 0.8rem;
         font-weight: 500;
     }
     
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
-        color: #ffffff !important;
+        color: #0f172a !important;
         font-size: 1.4rem;
         font-weight: 700;
     }
@@ -100,7 +109,7 @@ st.markdown("""
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 0.5rem 1.2rem;
+        padding: 0.6rem 1.2rem;
         font-weight: 500;
         font-size: 0.9rem;
         transition: all 0.2s ease;
@@ -112,14 +121,18 @@ st.markdown("""
     }
     
     /* 文本颜色统一 */
-    h1, h2, h3, h4, h5, h6, p, li, div {
-        color: #ffffff;
+    h1, h2, h3, h4, h5, h6 {
+        color: #0f172a;
+    }
+    
+    p, li, div {
+        color: #334155;
     }
     
     /* 警告/信息框样式 */
     .stAlert {
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 8px;
     }
     
@@ -127,7 +140,7 @@ st.markdown("""
     hr {
         border: none;
         height: 1px;
-        background: rgba(255, 255, 255, 0.08);
+        background: #e2e8f0;
         margin: 1.5rem 0;
     }
     
@@ -137,14 +150,15 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     .stTabs [data-baseweb="tab"] {
-        background: rgba(255,255,255,0.03);
+        background: #f1f5f9;
         border-radius: 6px;
         padding: 0.5rem 1rem;
-        color: white;
+        color: #475569;
         font-weight: 500;
     }
     .stTabs [aria-selected="true"] {
         background: #165DFF;
+        color: white;
     }
     
     /* 进度条样式 */
@@ -157,9 +171,9 @@ st.markdown("""
     .stNumberInput > div > div > input,
     .stTextArea textarea,
     .stSelectbox > div > div {
-        background: rgba(255,255,255,0.03);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.1);
+        background: #ffffff;
+        color: #0f172a;
+        border: 1px solid #cbd5e1;
         border-radius: 6px;
     }
     
@@ -167,6 +181,12 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* 表格样式优化 */
+    .stDataFrame {
+        border-radius: 8px;
+        overflow: hidden;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -216,7 +236,7 @@ with st.sidebar:
     <div class="sidebar-brand">
         <div style="font-size: 2rem; margin-bottom: 0.5rem;">🩺</div>
         <div class="sidebar-title">预健·MED·AI</div>
-        <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">中青年急重症智能预警系统</div>
+        <div style="color: #64748b; font-size: 0.8rem;">中青年急重症智能预警系统</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -743,7 +763,7 @@ elif page == "📊 数据同步中心":
                         <div style="background: rgba(255,75,75,0.05); border: 1px solid rgba(255,75,75,0.2); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
                             <h4 style="color: #ff4b4b; margin-bottom: 0.5rem;">🔴 {item_name} {abnormal_flag}</h4>
                             <p style="margin-bottom: 0.3rem;"><strong>检测结果：</strong>{result}（参考范围：{ref_range}）</p>
-                            <p style="color: rgba(255,255,255,0.9); line-height: 1.6;">{advice}</p>
+                            <p style="color: #334155; line-height: 1.6;">{advice}</p>
                         </div>
                         """, unsafe_allow_html=True)
             else:
