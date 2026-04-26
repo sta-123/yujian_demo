@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 终极修复CSS（所有文字100%清晰） --------------------------
+# -------------------------- 只修复你截图里的配色问题！其他不动 --------------------------
 st.markdown("""
 <style>
     /* 全局基础样式 */
@@ -76,48 +76,69 @@ st.markdown("""
         border-radius: 2px;
     }
     
-    /* 强制所有文字为白色（解决文字不显示问题） */
+    /* 全局文字 */
     p, li, div, span, label, h1, h2, h3, h4, h5, h6 {
         color: #ffffff !important;
     }
     
-    /* 输入框/数字输入/文本域 文字强制白色 */
-    .stNumberInput input,
-    .stTextArea textarea,
-    .stTextInput input {
-        background: rgba(255,255,255,0.95) !important;
-        color: #000000 !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 10px;
-        padding: 0.7rem 1rem;
-        font-size: 1rem !important;
-    }
+    /* ====================== 你截图里的问题 100% 修复 ====================== */
     
-    /* 下拉框/选择框 文字强制白色 */
+    /* 输入框 / 数字框 / 文本框 —— 白底黑字，超级清晰 */
+    .stNumberInput input,
+    .stTextInput input,
+    .stTextArea textarea {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        border-radius: 10px !important;
+        padding: 0.7rem 1rem !important;
+        font-size: 1rem !important;
+        border: 1px solid #ddd !important;
+    }
+
+    /* 下拉选择框 —— 白底黑字 */
     .stSelectbox div[data-baseweb="select"] {
-        background: rgba(255,255,255,0.95) !important;
-        border-radius: 10px;
+        background: #FFFFFF !important;
+        border-radius: 10px !important;
     }
     .stSelectbox div[data-baseweb="select"] * {
         color: #000000 !important;
+        font-weight: 500 !important;
     }
-    /* 下拉框选项文字强制黑色 */
-    div[data-baseweb="popover"] div[role="listbox"] div[role="option"] {
+
+    /* 下拉弹出菜单 —— 白底黑字，绝对能看见 */
+    div[data-baseweb="popover"] {
+        background: #FFFFFF !important;
+        border: 2px solid #3B82F6 !important;
+    }
+    div[data-baseweb="popover"] * {
         color: #000000 !important;
-        background: #ffffff !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
     }
-    div[data-baseweb="popover"] div[role="listbox"] div[role="option"]:hover {
-        background: rgba(59,130,246,0.1) !important;
+    div[role="option"]:hover {
+        background: #3B82F6 !important;
+        color: #FFFFFF !important;
     }
-    
-    /* 单选按钮文字强制白色 */
-    .stRadio label, .stRadio div[role="radiogroup"] label {
-        color: #ffffff !important;
-        font-size: 1.1rem !important;
+
+    /* 单选按钮 —— 文字高亮 + 圆圈醒目 */
+    .stRadio label {
+        color: #FFFFFF !important;
+        font-size: 1.05rem !important;
+        font-weight: 500 !important;
     }
-    .stRadio div[role="radiogroup"] div[role="radio"] {
+    div[role="radio"] {
+        border: 2px solid #FFFFFF !important;
         transform: scale(1.3);
     }
+
+    /* 上传文件按钮 */
+    .stFileUploader button {
+        background: #2563EB !important;
+        color: #FFFFFF !important;
+        border-radius: 8px !important;
+    }
+    
+    /* ==================================================================== */
     
     /* 按钮样式 */
     .stButton>button {
