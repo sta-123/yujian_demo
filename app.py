@@ -12,14 +12,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 清爽极简UI CSS --------------------------
+# -------------------------- 顶级UI设计CSS --------------------------
 st.markdown("""
 <style>
     html, body, [class*="css"] {
         font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif;
     }
     
-    /* 主背景简化 */
     .stApp {
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
         background-size: 400% 400%;
@@ -32,71 +31,73 @@ st.markdown("""
         100% { background-position: 0% 50%; }
     }
     
-    /* 卡片：去边框、简化阴影 */
     .module-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: none;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .module-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(22, 93, 255, 0.3);
     }
     
-    /* 侧边栏：极简处理 */
     [data-testid="stSidebar"] {
-        background: rgba(30, 41, 59, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-right: none;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .sidebar-brand {
         text-align: center;
-        padding: 1.5rem 0;
+        padding: 2rem 0;
         margin-bottom: 1rem;
-        background: transparent;
-        border-radius: 0;
-        margin: 0.5rem;
+        background: linear-gradient(135deg, rgba(22, 93, 255, 0.1), rgba(123, 97, 255, 0.1));
+        border-radius: 12px;
+        margin: 1rem;
     }
     
     .sidebar-title {
         color: #165DFF;
         font-weight: 700;
-        font-size: 1.4rem;
-        margin-bottom: 0.3rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
         background: linear-gradient(90deg, #165DFF, #7b61ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
     
-    /* 标题层级更清晰 */
     .main-title {
         color: #ffffff;
         font-weight: 700;
-        font-size: 2rem;
-        margin-bottom: 0.3rem;
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #ffffff, #e2e8f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
     
     .subtitle {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
     }
     
     .card-title {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         color: #ffffff;
         display: flex;
         align-items: center;
@@ -105,179 +106,220 @@ st.markdown("""
     
     .card-title::before {
         content: '';
-        width: 3px;
-        height: 20px;
+        width: 4px;
+        height: 24px;
         background: linear-gradient(180deg, #165DFF, #7b61ff);
         border-radius: 2px;
     }
     
-    /* 指标卡片：极简无框 */
     [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(5px);
-        border: none;
-        border-radius: 8px;
-        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
         color: white;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
     
     [data-testid="stMetric"]:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        border-color: rgba(22, 93, 255, 0.2);
     }
     
     [data-testid="stMetric"] label {
-        color: rgba(255, 255, 255, 0.6) !important;
-        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 0.9rem;
         font-weight: 500;
     }
     
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
         color: #ffffff !important;
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         font-weight: 700;
     }
     
-    /* 按钮：简化特效 */
     .stButton>button {
         background: linear-gradient(135deg, #165DFF, #0e4bcc);
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
+        border-radius: 10px;
+        padding: 0.7rem 1.5rem;
         font-weight: 600;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
-        box-shadow: 0 2px 8px rgba(22, 93, 255, 0.2);
+        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stButton>button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
     }
     
     .stButton>button:hover {
         background: linear-gradient(135deg, #0e4bcc, #0a3ca8);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(22, 93, 255, 0.4);
     }
     
-    /* 文本颜色 */
+    .stButton>button:hover::before {
+        left: 100%;
+    }
+    
     h1, h2, h3, h4, h5, h6, p, li, div {
         color: #ffffff;
     }
     
-    /* 提示框：简化 */
     .stAlert {
-        background: rgba(255, 255, 255, 0.03) !important;
-        backdrop-filter: blur(5px);
-        border: none !important;
-        border-radius: 8px;
-        padding: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
     
-    /* 分隔线：简化 */
+    .stAlert[data-baseweb="notification"] {
+        border-left: 4px solid #165DFF;
+    }
+    
+    .stAlert[data-baseweb="notification"][role="alert"] {
+        border-left: 4px solid #ff4b4b;
+    }
+    
+    .stAlert[data-baseweb="notification"][role="status"] {
+        border-left: 4px solid #00c853;
+    }
+    
     hr {
         border: none;
         height: 1px;
-        background: rgba(255, 255, 255, 0.1);
-        margin: 1.5rem 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        margin: 2rem 0;
     }
     
-    /* 标签页：去多余背景 */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        padding: 0;
-        background: transparent;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+        padding: 0.3rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 6px;
-        padding: 0.6rem 1rem;
-        color: rgba(255, 255, 255, 0.6);
+        background: transparent;
+        border-radius: 8px;
+        padding: 0.7rem 1.2rem;
+        color: rgba(255, 255, 255, 0.7);
         font-weight: 500;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.05);
         color: #ffffff;
     }
     
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, #165DFF, #0e4bcc);
         color: white;
+        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
     }
     
-    /* 进度条：简化 */
     .stProgress > div > div {
         background: linear-gradient(90deg, #165DFF, #7b61ff);
-        border-radius: 3px;
-        height: 6px !important;
+        border-radius: 4px;
+        height: 8px !important;
     }
     
     .stProgress > div {
-        height: 6px !important;
+        height: 8px !important;
         background: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 3px;
+        border-radius: 4px;
     }
     
-    /* 输入框：极简无框 */
     .stNumberInput > div > div > input,
     .stTextArea textarea,
     .stSelectbox > div > div {
         background: rgba(255, 255, 255, 0.05);
         color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 0.6rem 0.8rem;
-        transition: all 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        transition: all 0.3s ease;
     }
     
     .stNumberInput > div > div > input:focus,
     .stTextArea textarea:focus,
     .stSelectbox > div > div:focus {
+        border-color: #165DFF;
         box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
     }
     
-    /* 表格：简化边框 */
     .stDataFrame {
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stDataFrame table {
+        border-collapse: separate;
+        border-spacing: 0;
     }
     
     .stDataFrame th {
         background: rgba(22, 93, 255, 0.1) !important;
         color: #ffffff !important;
         font-weight: 600 !important;
-        padding: 0.8rem !important;
-        border: none !important;
+        padding: 1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
     
     .stDataFrame td {
-        padding: 0.8rem !important;
-        border: none !important;
+        padding: 1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
     
-    /* 隐藏默认元素 */
+    .stDataFrame tr:hover td {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 滚动条简化 */
     ::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
+        width: 6px;
+        height: 6px;
     }
     
     ::-webkit-scrollbar-track {
         background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
     }
     
     ::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
+        border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .stSpinner > div {
+        border-top-color: #165DFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -361,9 +403,9 @@ ABNORMAL_ADVICE = {
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🩺</div>
+        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🩺</div>
         <div class="sidebar-title">预健·MED·AI</div>
-        <div style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">中青年急重症智能预警系统</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">中青年急重症智能预警系统</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -378,13 +420,33 @@ with st.sidebar:
     
     st.divider()
     
-    # 简化的系统状态
+    # 系统状态
     st.markdown("""
-    <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-align: center; padding: 0.5rem;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-            <div style="width: 6px; height: 6px; background: #00c853; border-radius: 50%;"></div>
-            <span>系统运行正常</span>
+    <div style="padding: 1rem; background: rgba(0, 200, 83, 0.1); border-radius: 8px; margin: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <div style="width: 8px; height: 8px; background: #00c853; border-radius: 50%; animation: pulse 2s infinite;"></div>
+            <span style="color: #00c853; font-weight: 600;">系统运行正常</span>
         </div>
+        <p style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin: 0;">模型版本：v2.1.0 | 数据更新：实时</p>
+    </div>
+    
+    <style>
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(0, 200, 83, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # 隐私保护状态
+    st.divider()
+    st.markdown("""
+    <div style="padding: 1rem; background: rgba(22,93,255,0.1); border-radius: 8px; margin: 1rem;">
+        <p style="color: #165DFF; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">🔒 隐私保护状态</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 原始数据不出设备</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 仅上传加密特征值</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 联邦学习协同训练</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -561,9 +623,9 @@ if page == "🏠 系统首页":
             health_score = st.session_state.user_data['health_score']
             score_color = "#ff4b4b" if health_score < 60 else "#ff9800" if health_score < 80 else "#00c853"
             st.markdown(f"""
-            <div style="text-align: center; margin-bottom: 1.2rem;">
-                <div style="font-size: 2.5rem; font-weight: bold; color: {score_color}; margin-bottom: 0.3rem;">{health_score}</div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">健康评分 / 100</div>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="font-size: 3rem; font-weight: bold; color: {score_color}; margin-bottom: 0.5rem;">{health_score}</div>
+                <div style="color: rgba(255,255,255,0.7);">健康评分 / 100</div>
             </div>
             """, unsafe_allow_html=True)
             st.progress(health_score/100)
@@ -609,14 +671,14 @@ if page == "🏠 系统首页":
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["收缩压", "舒张压"]],
                     color=["#ff4b4b", "#ff9800"],
-                    height=300
+                    height=320
                 )
                 st.caption("* 红色为收缩压，橙色为舒张压，正常参考值：90-140/60-90 mmHg")
             with tab2:
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["静息心率", "夜间心率"]],
                     color=["#165DFF", "#7b61ff"],
-                    height=300
+                    height=320
                 )
                 st.caption("* 蓝色为日间静息心率，紫色为夜间静息心率，正常参考值：60-100 次/分")
             st.markdown('</div>', unsafe_allow_html=True)
@@ -628,8 +690,8 @@ if page == "🏠 系统首页":
         col_a, col_b = st.columns([1, 3])
         with col_a:
             st.markdown(f"""
-            <div style="text-align: center; padding: 0.5rem;">
-                <h2 style="color: {color}; font-weight: bold; font-size: 2.2rem; margin-bottom: 0.8rem;">{risk_level}</h2>
+            <div style="text-align: center; padding: 1rem;">
+                <h2 style="color: {color}; font-weight: bold; font-size: 3rem; margin-bottom: 1rem;">{risk_level}</h2>
             </div>
             """, unsafe_allow_html=True)
             risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
@@ -698,7 +760,7 @@ elif page == "📡 实时健康监测":
                     status_placeholder.markdown("<h3 style='color: #00c853; text-align: center;'>🟢 监测正常</h3>", unsafe_allow_html=True)
                     alert_placeholder.empty()
 
-                chart_placeholder.line_chart(realtime_history.set_index("时间"), color=["#165DFF", "#ff4b4b", "#7b61ff"], height=320)
+                chart_placeholder.line_chart(realtime_history.set_index("时间"), color=["#165DFF", "#ff4b4b", "#7b61ff"], height=350)
                 time.sleep(0.5)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -866,7 +928,7 @@ elif page == "📊 数据同步中心":
                 current_report[["指标名称", "检测结果", "参考范围", "异常标识"]].style.apply(highlight_abnormal, axis=1),
                 use_container_width=True,
                 hide_index=True,
-                height=320
+                height=350
             )
         
         with tab2:
@@ -890,7 +952,7 @@ elif page == "📊 数据同步中心":
                         compare_df.style.apply(highlight_abnormal, axis=1),
                         use_container_width=True,
                         hide_index=True,
-                        height=320
+                        height=350
                     )
                     st.caption("* 红色加粗为异常指标，可直观看到指标变化趋势")
                 else:
@@ -915,9 +977,9 @@ elif page == "📊 数据同步中心":
                     
                     with st.container():
                         st.markdown(f"""
-                        <div style="background: rgba(255,75,75,0.05); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                            <h4 style="color: #ff4b4b; margin-bottom: 0.5rem;">🔴 {item_name} {abnormal_flag}</h4>
-                            <p style="margin-bottom: 0.3rem;"><strong>检测结果：</strong>{result}（参考范围：{ref_range}）</p>
+                        <div style="background: rgba(255,75,75,0.05); border: 1px solid rgba(255,75,75,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <h4 style="color: #ff4b4b; margin-bottom: 0.8rem;">🔴 {item_name} {abnormal_flag}</h4>
+                            <p style="margin-bottom: 0.5rem;"><strong>检测结果：</strong>{result}（参考范围：{ref_range}）</p>
                             <p style="color: rgba(255,255,255,0.9); line-height: 1.6;">{advice}</p>
                         </div>
                         """, unsafe_allow_html=True)
@@ -939,8 +1001,8 @@ elif page == "⚠️ 风险预警中心":
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
             st.markdown('<p class="card-title">🎯 最终风险评级</p>', unsafe_allow_html=True)
             st.markdown(f"""
-            <div style="text-align: center; padding: 1.5rem 0;">
-                <h1 style="color: {color}; font-weight: bold; font-size: 3rem; margin-bottom: 1rem;">{risk_level}</h1>
+            <div style="text-align: center; padding: 2rem 0;">
+                <h1 style="color: {color}; font-weight: bold; font-size: 4rem; margin-bottom: 1rem; text-shadow: 0 0 20px {color}40;">{risk_level}</h1>
             </div>
             """, unsafe_allow_html=True)
             risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
@@ -983,7 +1045,7 @@ elif page == "⚠️ 风险预警中心":
                     "风险值": [family_weight, 80, 75, 60, 30]
                 }).set_index("风险维度"),
                 color="#ff4b4b",
-                height=200
+                height=220
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1065,3 +1127,25 @@ elif page == "💊 健康管理中心":
             st.caption("每日进行30分钟中等强度有氧运动（快走、慢跑、游泳、骑行），避免高强度剧烈运动，每周至少5天")
             st.write("**饮食调整**")
             st.caption("每日钠盐摄入不超过5g，减少高脂、高糖、高嘌呤食物，增加新鲜蔬果、优质蛋白、膳食纤维摄入，每日饮水1500-2000ml")
+            st.write("**压力管理**")
+            st.caption("每日进行10分钟冥想放松训练，减少连续工作时长，每工作1小时休息10分钟，避免长期精神紧张")
+            st.write("**烟酒控制**")
+            st.caption("禁止吸烟，限制酒精摄入，每周饮酒不超过1次，男性每日酒精摄入不超过25g，女性不超过15g")
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        with st.container():
+            st.markdown('<div class="module-card">', unsafe_allow_html=True)
+            st.markdown('<p class="card-title">🔔 用药与复查提醒</p>', unsafe_allow_html=True)
+            st.divider()
+            st.write("**每日提醒**：早8点、晚8点测量血压心率并上传系统")
+            st.write("**复查提醒**：2026-XX-XX 心内科就诊，完善24小时动态心电图、冠脉CTA检查")
+            st.write("**体检提醒**：2026-XX-XX 年度全面体检，重点关注心血管、血脂、血糖相关指标")
+            st.divider()
+            if st.button("开启微信提醒"):
+                st.success("✅ 微信提醒已开启，将按时推送提醒消息")
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div class="module-card">', unsafe_allow_html=True)
+        st.info("📌 方案说明：本管理方案基于您的风险等级、健康数据、生活习惯，由AI模型自动生成，会根据您每日上传的监测数据动态调整，实现全周期闭环健康管理；所有建议均参考《中国心血管病防治指南》制定，仅供参考，具体诊疗请遵医嘱。")
+        st.markdown('</div>', unsafe_allow_html=True)
