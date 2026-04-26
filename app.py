@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 只修复你截图里的配色问题！其他不动 --------------------------
+# -------------------------- 只修复你截图里的两处文字颜色！其他完全不变 --------------------------
 st.markdown("""
 <style>
     /* 全局基础样式 */
@@ -81,9 +81,23 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    /* ====================== 你截图里的问题 100% 修复 ====================== */
+    /* ====================== 修复你截图里看不清的文字：强制纯白色 ====================== */
     
-    /* 输入框 / 数字框 / 文本框 —— 白底黑字，超级清晰 */
+    /* 修复 1：下拉框、选择框内部文字（你截图里看不清的地方） */
+    .stSelectbox div[data-baseweb="select"] div {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* 修复 2：文件上传、按钮旁边的小字（你截图里看不清的地方） */
+    .stFileUploader div, .stFileUploader span {
+        color: #FFFFFF !important;
+        font-weight: 500 !important;
+    }
+    
+    /* ==================================================================== */
+    
+    /* 输入框 / 数字框 / 文本框 */
     .stNumberInput input,
     .stTextInput input,
     .stTextArea textarea {
@@ -95,17 +109,13 @@ st.markdown("""
         border: 1px solid #ddd !important;
     }
 
-    /* 下拉选择框 —— 白底黑字 */
+    /* 下拉选择框 */
     .stSelectbox div[data-baseweb="select"] {
         background: #FFFFFF !important;
         border-radius: 10px !important;
     }
-    .stSelectbox div[data-baseweb="select"] * {
-        color: #000000 !important;
-        font-weight: 500 !important;
-    }
 
-    /* 下拉弹出菜单 —— 白底黑字，绝对能看见 */
+    /* 下拉弹出菜单 */
     div[data-baseweb="popover"] {
         background: #FFFFFF !important;
         border: 2px solid #3B82F6 !important;
@@ -120,7 +130,7 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* 单选按钮 —— 文字高亮 + 圆圈醒目 */
+    /* 单选按钮 */
     .stRadio label {
         color: #FFFFFF !important;
         font-size: 1.05rem !important;
@@ -137,8 +147,6 @@ st.markdown("""
         color: #FFFFFF !important;
         border-radius: 8px !important;
     }
-    
-    /* ==================================================================== */
     
     /* 按钮样式 */
     .stButton>button {
