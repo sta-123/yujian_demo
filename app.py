@@ -4,7 +4,7 @@ import numpy as np
 import time
 from datetime import datetime, timedelta
 
-# -------------------------- 页面全局配置 --------------------------
+# -------------------------- 页面全局配置 -------------------------
 st.set_page_config(
     page_title="预健·MED·AI | 中青年急重症智能预警系统",
     page_icon="🩺",
