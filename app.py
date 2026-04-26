@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 终极修复CSS（所有文字100%清晰） --------------------------
+# -------------------------- 终极修复CSS（所有选择控件统一白底黑字） --------------------------
 st.markdown("""
 <style>
     /* 全局基础样式 */
@@ -81,11 +81,11 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    /* 输入框/数字输入/文本域 文字强制白色 */
+    /* 输入框/数字输入/文本域 统一白底黑字 */
     .stNumberInput input,
     .stTextArea textarea,
     .stTextInput input {
-        background: rgba(255,255,255,0.95) !important;
+        background: #ffffff !important;
         color: #000000 !important;
         border: 1px solid rgba(255,255,255,0.2) !important;
         border-radius: 10px;
@@ -93,15 +93,15 @@ st.markdown("""
         font-size: 1rem !important;
     }
     
-    /* 下拉框/选择框 文字强制白色 */
+    /* 下拉框/选择框 统一白底黑字 */
     .stSelectbox div[data-baseweb="select"] {
-        background: rgba(255,255,255,0.95) !important;
+        background: #ffffff !important;
         border-radius: 10px;
     }
     .stSelectbox div[data-baseweb="select"] * {
         color: #000000 !important;
     }
-    /* 下拉框选项文字强制黑色 */
+    /* 下拉框选项 统一白底黑字 */
     div[data-baseweb="popover"] div[role="listbox"] div[role="option"] {
         color: #000000 !important;
         background: #ffffff !important;
@@ -110,13 +110,24 @@ st.markdown("""
         background: rgba(59,130,246,0.1) !important;
     }
     
-    /* 单选按钮文字强制白色 */
+    /* 单选按钮 统一白底黑字 */
     .stRadio label, .stRadio div[role="radiogroup"] label {
         color: #ffffff !important;
         font-size: 1.1rem !important;
     }
     .stRadio div[role="radiogroup"] div[role="radio"] {
         transform: scale(1.3);
+        background: #ffffff !important;
+    }
+    
+    /* 文件上传组件 统一白底黑字 */
+    [data-testid="stFileUploader"] div {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border-radius: 10px;
+    }
+    [data-testid="stFileUploader"] span {
+        color: #000000 !important;
     }
     
     /* 按钮样式 */
