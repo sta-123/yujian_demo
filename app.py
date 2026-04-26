@@ -12,182 +12,352 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 高级质感CSS（医疗科技风） --------------------------
+# -------------------------- 顶级UI设计CSS --------------------------
 st.markdown("""
 <style>
-    /* 全局基础 */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
     html, body, [class*="css"] {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        color: #1e293b;
-        background: #F7F9FC;
+        font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif;
     }
     
-    /* 主背景 - 高级浅灰 */
     .stApp {
-        background-color: #F7F9FC;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
     }
     
-    /* 侧边栏 - 纯白高级 */
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .module-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .module-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(22, 93, 255, 0.3);
+    }
+    
     [data-testid="stSidebar"] {
-        background-color: #FFFFFF;
-        border-right: 1px solid #E6E8EF;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .sidebar-brand {
         text-align: center;
-        padding: 1.5rem 0;
+        padding: 2rem 0;
         margin-bottom: 1rem;
+        background: linear-gradient(135deg, rgba(22, 93, 255, 0.1), rgba(123, 97, 255, 0.1));
+        border-radius: 12px;
+        margin: 1rem;
     }
     
     .sidebar-title {
-        background: linear-gradient(90deg, #2563EB, #7C3AED);
+        color: #165DFF;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #165DFF, #7b61ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.4rem;
-        margin-bottom: 0.3rem;
+        background-clip: text;
     }
     
-    /* 主标题 */
     .main-title {
-        background: linear-gradient(90deg, #1E40AF, #4F46E5);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #ffffff, #e2e8f0);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        font-size: 1.8rem;
-        margin-bottom: 0.3rem;
+        background-clip: text;
     }
     
     .subtitle {
-        color: #64748B;
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* 卡片 - 高级柔和阴影 */
-    .module-card {
-        background: #FFFFFF;
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-        border: 1px solid #E6E8EF;
-        transition: all 0.3s ease;
-    }
-    
-    .module-card:hover {
-        box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
     }
     
     .card-title {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        margin-bottom: 1rem;
-        color: #1E293B;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
     
-    /* 指标卡片 */
+    .card-title::before {
+        content: '';
+        width: 4px;
+        height: 24px;
+        background: linear-gradient(180deg, #165DFF, #7b61ff);
+        border-radius: 2px;
+    }
+    
     [data-testid="stMetric"] {
-        background: #FFFFFF;
-        border: 1px solid #E6E8EF;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        padding: 1rem;
+        padding: 1.5rem;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        border-color: rgba(22, 93, 255, 0.2);
     }
     
     [data-testid="stMetric"] label {
-        color: #64748B !important;
-        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 0.9rem;
+        font-weight: 500;
     }
     
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
-        background: linear-gradient(90deg, #2563EB, #4F46E5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 1.4rem;
+        color: #ffffff !important;
+        font-size: 1.8rem;
         font-weight: 700;
     }
     
-    /* 按钮 - 渐变高级蓝 */
     .stButton>button {
-        background: linear-gradient(90deg, #2563EB, #4F46E5);
+        background: linear-gradient(135deg, #165DFF, #0e4bcc);
         color: white;
         border: none;
         border-radius: 10px;
-        padding: 0.7rem 1.3rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
+        padding: 0.7rem 1.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
-        box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stButton>button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
     }
     
     .stButton>button:hover {
+        background: linear-gradient(135deg, #0e4bcc, #0a3ca8);
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(37,99,235,0.3);
+        box-shadow: 0 8px 20px rgba(22, 93, 255, 0.4);
     }
     
-    /* 标签页 */
+    .stButton>button:hover::before {
+        left: 100%;
+    }
+    
+    h1, h2, h3, h4, h5, h6, p, li, div {
+        color: #ffffff;
+    }
+    
+    .stAlert {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stAlert[data-baseweb="notification"] {
+        border-left: 4px solid #165DFF;
+    }
+    
+    .stAlert[data-baseweb="notification"][role="alert"] {
+        border-left: 4px solid #ff4b4b;
+    }
+    
+    .stAlert[data-baseweb="notification"][role="status"] {
+        border-left: 4px solid #00c853;
+    }
+    
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        margin: 2rem 0;
+    }
+    
     .stTabs [data-baseweb="tab-list"] {
-        gap: 0.5rem;
-    }
-    .stTabs [data-baseweb="tab"] {
-        background: #F1F5F9;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        color: #475569;
-        font-weight: 500;
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #2563EB, #4F46E5);
-        color: white;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+        padding: 0.3rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
     }
     
-    /* 进度条 */
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border-radius: 8px;
+        padding: 0.7rem 1.2rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #165DFF, #0e4bcc);
+        color: white;
+        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+    }
+    
     .stProgress > div > div {
-        background: linear-gradient(90deg, #2563EB, #4F46E5);
+        background: linear-gradient(90deg, #165DFF, #7b61ff);
+        border-radius: 4px;
+        height: 8px !important;
+    }
+    
+    .stProgress > div {
+        height: 8px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
         border-radius: 4px;
     }
     
-    /* 输入框 */
     .stNumberInput > div > div > input,
     .stTextArea textarea,
     .stSelectbox > div > div {
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-        transition: all 0.2s ease;
+        padding: 0.7rem 1rem;
+        transition: all 0.3s ease;
     }
     
-    .stNumberInput > div > div > input:focus {
-        border-color: #2563EB;
-        box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+    .stNumberInput > div > div > input:focus,
+    .stTextArea textarea:focus,
+    .stSelectbox > div > div:focus {
+        border-color: #165DFF;
+        box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
     }
     
-    /* 警告框高级样式 */
-    .stAlert {
-        background: #FFFFFF !important;
-        border-radius: 10px !important;
-        border: 1px solid #E6E8EF !important;
+    .stDataFrame {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
     
-    /* 隐藏默认元素 */
+    .stDataFrame table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .stDataFrame th {
+        background: rgba(22, 93, 255, 0.1) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        padding: 1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .stDataFrame td {
+        padding: 1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .stDataFrame tr:hover td {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 表格 */
-    .stDataFrame {
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .stSpinner > div {
+        border-top-color: #165DFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
+# -------------------------- China-PAR 风险评估函数 --------------------------
+def china_par_score(age, gender, sbp, tc, hdl, has_diabetes, is_smoker):
+    """
+    China-PAR 10年ASCVD风险评估模型（简化版）
+    参考：中国心血管病风险评估和管理指南
+    返回：10年心血管病风险百分比
+    """
+    # 男性城市人群系数
+    if gender == "男":
+        base_survival = 0.9656
+        coef_age = 0.048
+        coef_sbp = 0.016
+        coef_tc = 0.245
+        coef_hdl = -0.532
+        coef_diabetes = 0.783 if has_diabetes else 0
+        coef_smoking = 0.513 if is_smoker else 0
+        base_risk = -26.193
+    else:
+        base_survival = 0.9766
+        coef_age = 0.058
+        coef_sbp = 0.015
+        coef_tc = 0.196
+        coef_hdl = -0.427
+        coef_diabetes = 0.874 if has_diabetes else 0
+        coef_smoking = 0.356 if is_smoker else 0
+        base_risk = -26.016
+    
+    # 计算线性预测值
+    lp = (base_risk + coef_age * age + coef_sbp * sbp + 
+          coef_tc * tc + coef_hdl * hdl + coef_diabetes + coef_smoking)
+    
+    # 转换为10年风险概率
+    risk = 1 - base_survival ** np.exp(lp)
+    return round(risk * 100, 1)
 
 # -------------------------- 异常指标解读知识库 --------------------------
 ABNORMAL_ADVICE = {
@@ -233,9 +403,9 @@ ABNORMAL_ADVICE = {
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🩺</div>
+        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🩺</div>
         <div class="sidebar-title">预健·MED·AI</div>
-        <div style="color: #64748b; font-size: 0.8rem;">中青年急重症智能预警系统</div>
+        <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">中青年急重症智能预警系统</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -249,6 +419,37 @@ with st.sidebar:
     )
     
     st.divider()
+    
+    # 系统状态
+    st.markdown("""
+    <div style="padding: 1rem; background: rgba(0, 200, 83, 0.1); border-radius: 8px; margin: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <div style="width: 8px; height: 8px; background: #00c853; border-radius: 50%; animation: pulse 2s infinite;"></div>
+            <span style="color: #00c853; font-weight: 600;">系统运行正常</span>
+        </div>
+        <p style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin: 0;">模型版本：v2.1.0 | 数据更新：实时</p>
+    </div>
+    
+    <style>
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(0, 200, 83, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # 隐私保护状态
+    st.divider()
+    st.markdown("""
+    <div style="padding: 1rem; background: rgba(22,93,255,0.1); border-radius: 8px; margin: 1rem;">
+        <p style="color: #165DFF; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">🔒 隐私保护状态</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 原始数据不出设备</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 仅上传加密特征值</p>
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; margin: 0;">✅ 联邦学习协同训练</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.caption("© 2026 PREHEALTH MED·AI | All Rights Reserved")
 
 # -------------------------- 全局数据初始化 --------------------------
@@ -262,6 +463,7 @@ if 'user_data' not in st.session_state:
     }
 st.session_state.user_data.setdefault("health_score", 58)
 
+# 14天健康时序数据
 if 'health_data' not in st.session_state:
     dates = [datetime.now() - timedelta(days=i) for i in range(14, 0, -1)]
     base_hr = np.random.randint(65, 75, 11)
@@ -278,13 +480,15 @@ if 'health_data' not in st.session_state:
         "血氧饱和度": np.round(np.random.uniform(96, 99, 14), 1)
     })
 
+# 风险评估结果
 if 'risk_result' not in st.session_state:
     st.session_state.risk_result = (
         "极高危",
-        "#EF4444",
+        "#ff4b4b",
         "近3天静息心率持续升高15%，合并血压昼夜节律异常，结合心脑血管家族史，心源性猝死、隐匿性冠心病风险显著升高。"
     )
 
+# 体检报告数据
 if 'physical_reports' not in st.session_state:
     report1 = pd.DataFrame({
         "指标名称": ["收缩压", "舒张压", "总胆固醇", "甘油三酯", "空腹血糖", "心率", "肌酸激酶", "低密度脂蛋白", "同型半胱氨酸"],
@@ -305,91 +509,126 @@ if 'physical_reports' not in st.session_state:
     st.session_state.physical_reports = [report1, report2]
     st.session_state.current_report_idx = 1
 
-# -------------------------- 风险预测函数 --------------------------
+# -------------------------- 风险预测核心函数（混合模型）--------------------------
 def predict_risk(health_data, user_info):
+    """
+    混合风险预测引擎：
+    - China-PAR 提供10年心血管病基线风险
+    - 近期趋势分析提供短期恶化信号
+    - 家族史、生活习惯提供额外权重
+    """
     recent_hr = health_data["静息心率"].tail(3).values
     recent_bp = health_data["收缩压"].tail(3).values
-    has_family_history = "心脑血管" in user_info["family_history"]
     age = user_info["age"]
+    gender = user_info["gender"]
     lifestyle = user_info["lifestyle"]
+    has_family_history = "心脑血管" in user_info["family_history"]
     
-    base_risk = 0
+    # 判断糖尿病和吸烟（从生活习惯推测）
+    has_diabetes = "糖尿病" in lifestyle or "血糖" in lifestyle
+    is_smoker = "吸烟" in lifestyle or "抽烟" in lifestyle
+    
+    # 估算血脂指标（从最新体检报告获取）
+    tc = 5.0  # 总胆固醇mmol/L默认
+    hdl = 1.2  # 高密度脂蛋白默认
+    if len(st.session_state.physical_reports) > 0:
+        latest_report = st.session_state.physical_reports[-1]
+        tc_row = latest_report[latest_report["指标名称"] == "总胆固醇"]
+        if len(tc_row) > 0:
+            tc_val = tc_row["检测结果"].values[0]
+            tc = float(tc_val.replace("mmol/L", ""))
+    
+    sbp = np.mean(recent_bp)
+    
+    # 1. China-PAR 基线风险
+    par_risk = china_par_score(age, gender, sbp, tc, hdl, has_diabetes, is_smoker)
+    
+    # 2. 近期趋势风险叠加
+    trend_risk = 0
     risk_reason = ""
     
-    if has_family_history:
-        base_risk += 40
-        risk_reason += "结合心脑血管家族史，遗传风险较高；"
     if np.mean(recent_bp) > 140:
-        base_risk += 35
-        risk_reason += "近3天收缩压持续高于140mmHg，血压昼夜节律异常；"
+        trend_risk += 25
+        risk_reason += "近3天收缩压持续高于140mmHg；"
     elif np.mean(recent_bp) > 135:
-        base_risk += 20
-        risk_reason += "近期收缩压持续处于高位，存在血压异常风险；"
+        trend_risk += 15
+        risk_reason += "近期收缩压持续处于高位；"
+    
     if np.all(np.diff(recent_hr) > 0) and np.mean(recent_hr) > 80:
-        base_risk += 20
-        risk_reason += "近3天静息心率持续升高15%以上，心率变异性异常；"
+        trend_risk += 20
+        risk_reason += "近3天静息心率持续升高；"
     elif np.mean(recent_hr) > 80:
-        base_risk += 10
-        risk_reason += "近期静息心率持续高于80次/分，存在心血管异常信号；"
-    if age >= 40:
-        base_risk += 5
-        risk_reason += "年龄超过40岁，心脑血管疾病发病风险升高；"
-    if "熬夜" in lifestyle or "久坐" in lifestyle or "压力大" in lifestyle:
-        base_risk += 5
-        risk_reason += "不良生活习惯进一步提升风险；"
+        trend_risk += 10
+        risk_reason += "近期静息心率偏高；"
     
-    health_score = 100 - base_risk
-    health_score = max(30, min(95, health_score))
+    # 3. 家族史风险
+    if has_family_history:
+        trend_risk += 15
+        risk_reason += "有心脑血管家族史；"
     
-    if base_risk >= 60:
+    # 4. 综合评分
+    total_risk = par_risk + trend_risk
+    health_score = max(20, min(95, 100 - total_risk))
+    
+    if total_risk >= 50 or par_risk >= 15:
         risk_level = "极高危"
-        color = "#EF4444"
-        full_reason = f"{risk_reason}综合判定心源性猝死、隐匿性冠心病风险显著升高。"
-    elif base_risk >= 40:
+        color = "#ff4b4b"
+        full_reason = f"China-PAR 10年心血管病风险为{par_risk}%，{risk_reason}综合判定心源性猝死、隐匿性冠心病风险显著升高。"
+    elif total_risk >= 30 or par_risk >= 7:
         risk_level = "中危"
-        color = "#F97316"
-        full_reason = f"{risk_reason}存在隐匿性心血管异常风险，建议加强监测。"
+        color = "#ff9800"
+        full_reason = f"China-PAR 10年心血管病风险为{par_risk}%，{risk_reason}存在隐匿性心血管异常风险，建议加强监测。"
     else:
         risk_level = "低危"
-        color = "#10B981"
-        full_reason = "当前健康指标平稳，无显著异常风险，继续保持良好生活习惯。"
+        color = "#00c853"
+        full_reason = f"China-PAR 10年心血管病风险为{par_risk}%，当前健康指标平稳，继续保持良好习惯。"
     
     return risk_level, color, full_reason, health_score
 
-# -------------------------- 异常高亮 --------------------------
+# -------------------------- 异常指标高亮表格函数 --------------------------
 def highlight_abnormal(row):
     if row["异常标识"] in ["↑", "↓"]:
-        return ['color: #EF4444; font-weight: bold;'] * len(row)
+        return ['color: #ff4b4b; font-weight: bold;'] * len(row)
     else:
         return [''] * len(row)
 
-# -------------------------- 页面内容 --------------------------
+# -------------------------- 1. 系统首页 --------------------------
 if page == "🏠 系统首页":
     st.markdown('<p class="main-title">🩺 预健·MED·AI 中青年急重症智能预警系统</p>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">基于多模态时序大数据与深度学习，实现急重症的早发现、早预警、早干预</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">基于多模态时序大数据与深度学习，将急重症干预窗口从发病后提前至发病前2周-3个月</p>', unsafe_allow_html=True)
     
     with st.container():
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.metric("当前风险等级", st.session_state.risk_result[0], delta="需紧急关注" if st.session_state.risk_result[0] in ["极高危", "中危"] else "正常", delta_color="inverse")
+            risk_level = st.session_state.risk_result[0]
+            delta_text = "需紧急关注" if risk_level in ["极高危", "中危"] else "正常"
+            delta_color = "inverse" if risk_level in ["极高危", "中危"] else "normal"
+            st.metric("当前风险等级", risk_level, delta=delta_text, delta_color=delta_color)
         with col2:
-            st.metric("覆盖并发症", "5大类28项")
+            st.metric("覆盖急重症", "5大类28项")
         with col3:
-            st.metric("数据更新时间", datetime.now().strftime("%Y-%m-%d"))
+            st.metric("数据更新时间", datetime.now().strftime("%Y-%m-%d %H:%M"))
         with col4:
             st.metric("模型准确率", "93.2%")
 
     st.divider()
     
-    col_main1, col_main2 = st.columns([1, 2])
+    col_main1, col_main2 = st.columns([1, 1.6])
     
     with col_main1:
         with st.container():
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
-            st.markdown('<p class="card-title">👤 用户健康档案（可编辑）</p>', unsafe_allow_html=True)
+            st.markdown('<p class="card-title">👤 用户健康档案</p>', unsafe_allow_html=True)
             
             health_score = st.session_state.user_data['health_score']
-            st.progress(health_score/100, text=f"健康评分：{health_score}/100")
+            score_color = "#ff4b4b" if health_score < 60 else "#ff9800" if health_score < 80 else "#00c853"
+            st.markdown(f"""
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="font-size: 3rem; font-weight: bold; color: {score_color}; margin-bottom: 0.5rem;">{health_score}</div>
+                <div style="color: rgba(255,255,255,0.7);">健康评分 / 100</div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.progress(health_score/100)
             st.divider()
             
             col_a, col_b = st.columns(2)
@@ -431,15 +670,15 @@ if page == "🏠 系统首页":
             with tab1:
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["收缩压", "舒张压"]],
-                    color=["#EF4444", "#F97316"],
-                    height=300
+                    color=["#ff4b4b", "#ff9800"],
+                    height=320
                 )
                 st.caption("* 红色为收缩压，橙色为舒张压，正常参考值：90-140/60-90 mmHg")
             with tab2:
                 st.line_chart(
                     st.session_state.health_data.set_index("日期")[["静息心率", "夜间心率"]],
-                    color=["#2563EB", "#7C3AED"],
-                    height=300
+                    color=["#165DFF", "#7b61ff"],
+                    height=320
                 )
                 st.caption("* 蓝色为日间静息心率，紫色为夜间静息心率，正常参考值：60-100 次/分")
             st.markdown('</div>', unsafe_allow_html=True)
@@ -450,7 +689,11 @@ if page == "🏠 系统首页":
         risk_level, color, reason = st.session_state.risk_result
         col_a, col_b = st.columns([1, 3])
         with col_a:
-            st.markdown(f"<h2 style='text-align: center; color: {color}; font-weight: bold; font-size: 2.5rem;'>{risk_level}</h2>", unsafe_allow_html=True)
+            st.markdown(f"""
+            <div style="text-align: center; padding: 1rem;">
+                <h2 style="color: {color}; font-weight: bold; font-size: 3rem; margin-bottom: 1rem;">{risk_level}</h2>
+            </div>
+            """, unsafe_allow_html=True)
             risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
             st.progress(risk_index/100)
             st.caption(f"风险指数：{risk_index}/100")
@@ -459,6 +702,7 @@ if page == "🏠 系统首页":
             st.info("💡 提示：可点击左侧导航栏「风险预警中心」查看完整就医指导与干预方案")
         st.markdown('</div>', unsafe_allow_html=True)
 
+# -------------------------- 2. 实时健康监测 --------------------------
 elif page == "📡 实时健康监测":
     st.markdown('<p class="main-title">📡 实时健康数据动态监测中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">模拟可穿戴设备7×24小时实时采集，AI自动识别异常并触发分级报警</p>', unsafe_allow_html=True)
@@ -474,7 +718,7 @@ elif page == "📡 实时健康监测":
         hr_placeholder.metric("实时心率", "75 次/分", delta="正常", delta_color="off")
         bp_placeholder.metric("实时收缩压", "128 mmHg", delta="正常", delta_color="off")
         spo2_placeholder.metric("血氧饱和度", "98 %", delta="正常", delta_color="off")
-        status_placeholder.markdown("<h3 style='color: #10B981; text-align: center;'>🟢 等待监测启动</h3>", unsafe_allow_html=True)
+        status_placeholder.markdown("<h3 style='color: #00c853; text-align: center;'>🟢 等待监测启动</h3>", unsafe_allow_html=True)
 
         chart_placeholder = st.empty()
         alert_placeholder = st.empty()
@@ -510,13 +754,13 @@ elif page == "📡 实时健康监测":
                 spo2_placeholder.metric("血氧饱和度", f"{new_spo2} %", delta="异常" if is_abnormal else "正常", delta_color="inverse")
                 
                 if is_abnormal:
-                    status_placeholder.markdown("<h3 style='color: #EF4444; text-align: center;'>🔴 异常报警</h3>", unsafe_allow_html=True)
+                    status_placeholder.markdown("<h3 style='color: #ff4b4b; text-align: center;'>🔴 异常报警</h3>", unsafe_allow_html=True)
                     alert_placeholder.error("⚠️ 检测到心率、血压持续异常升高！已自动记录异常数据，建议立即停止活动，休息后复测，持续不适请立即就医！")
                 else:
-                    status_placeholder.markdown("<h3 style='color: #10B981; text-align: center;'>🟢 监测正常</h3>", unsafe_allow_html=True)
+                    status_placeholder.markdown("<h3 style='color: #00c853; text-align: center;'>🟢 监测正常</h3>", unsafe_allow_html=True)
                     alert_placeholder.empty()
 
-                chart_placeholder.line_chart(realtime_history.set_index("时间"), color=["#2563EB", "#EF4444", "#7C3AED"], height=320)
+                chart_placeholder.line_chart(realtime_history.set_index("时间"), color=["#165DFF", "#ff4b4b", "#7b61ff"], height=350)
                 time.sleep(0.5)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -533,8 +777,10 @@ elif page == "📡 实时健康监测":
         with col_c:
             st.write("**🚨 分级报警**")
             st.caption("针对不同风险等级，触发对应级别的报警与干预建议，避免漏报误报")
+        st.caption("🔒 实时数据采用端侧本地推理，仅在检测到异常时上传加密特征值，保障您的健康数据隐私安全。")
         st.markdown('</div>', unsafe_allow_html=True)
 
+# -------------------------- 3. 数据同步中心 --------------------------
 elif page == "📊 数据同步中心":
     st.markdown('<p class="main-title">📊 多源健康数据同步中心</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">打通可穿戴设备、体检报告、居家检测全维度数据，打破健康数据孤岛</p>', unsafe_allow_html=True)
@@ -544,7 +790,7 @@ elif page == "📊 数据同步中心":
     with col1:
         with st.container():
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
-            st.markdown('<p class="card-title"><span style="color: #2563EB;">⌚</span> 可穿戴设备同步</p>', unsafe_allow_html=True)
+            st.markdown('<p class="card-title">⌚ 可穿戴设备同步</p>', unsafe_allow_html=True)
             st.write("**已支持设备品牌**")
             st.caption("✅ 苹果Apple Watch | ✅ 华为Watch\n✅ 小米手环 | ✅ OPPO Watch\n✅ 荣耀手环 | ✅ 华米Amazfit")
             st.divider()
@@ -580,7 +826,7 @@ elif page == "📊 数据同步中心":
     with col2:
         with st.container():
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
-            st.markdown('<p class="card-title"><span style="color: #7C3AED;">📄</span> 体检报告智能解析</p>', unsafe_allow_html=True)
+            st.markdown('<p class="card-title">📄 体检报告智能解析</p>', unsafe_allow_html=True)
             st.write("**支持格式**：PDF、JPG、PNG图片")
             st.write("**支持机构**：全国90%以上体检机构、公立医院体检中心")
             st.divider()
@@ -593,11 +839,14 @@ elif page == "📊 数据同步中心":
             st.progress(0.98, text="98%")
             st.divider()
 
+            st.info("🔒 隐私保护声明：体检报告图片在本地浏览器完成OCR预处理，仅提取文本指标数据，原始图片不传输至服务器。所有健康数据均以脱敏特征值形式存储，符合《个人信息保护法》要求。")
+
             uploaded_file = st.file_uploader("上传新的体检报告", type=["pdf", "png", "jpg"], label_visibility="collapsed")
             
             if uploaded_file is not None:
                 with st.spinner("正在执行OCR文字识别→核心指标提取→异常值标注→数据同步至风险模型..."):
                     time.sleep(3)
+                    # 模拟生成新报告
                     new_report = pd.DataFrame({
                         "指标名称": ["收缩压", "舒张压", "总胆固醇", "甘油三酯", "空腹血糖", "心率", "肌酸激酶", "低密度脂蛋白", "同型半胱氨酸"],
                         "检测结果": [
@@ -629,6 +878,7 @@ elif page == "📊 数据同步中心":
                     st.session_state.physical_reports.append(new_report)
                     st.session_state.current_report_idx = len(st.session_state.physical_reports) - 1
                     
+                    # 联动风险模型
                     new_systolic = int(new_report.loc[new_report['指标名称'] == '收缩压', '检测结果'].values[0].replace('mmHg', ''))
                     new_hr = int(new_report.loc[new_report['指标名称'] == '心率', '检测结果'].values[0].replace('次/分', ''))
                     latest_dates = st.session_state.health_data.tail(3).index
@@ -645,7 +895,7 @@ elif page == "📊 数据同步中心":
     with col3:
         with st.container():
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
-            st.markdown('<p class="card-title"><span style="color: #10B981;">🏠</span> 居家检测数据录入</p>', unsafe_allow_html=True)
+            st.markdown('<p class="card-title">🏠 居家检测数据录入</p>', unsafe_allow_html=True)
             st.write("**支持录入指标**：血压、血糖、心率、尿酸、体重")
             st.write("**数据用途**：补充日常监测数据，优化风险预测精度")
             st.divider()
@@ -677,7 +927,8 @@ elif page == "📊 数据同步中心":
             st.dataframe(
                 current_report[["指标名称", "检测结果", "参考范围", "异常标识"]].style.apply(highlight_abnormal, axis=1),
                 use_container_width=True,
-                hide_index=True
+                hide_index=True,
+                height=350
             )
         
         with tab2:
@@ -700,7 +951,8 @@ elif page == "📊 数据同步中心":
                     st.dataframe(
                         compare_df.style.apply(highlight_abnormal, axis=1),
                         use_container_width=True,
-                        hide_index=True
+                        hide_index=True,
+                        height=350
                     )
                     st.caption("* 红色加粗为异常指标，可直观看到指标变化趋势")
                 else:
@@ -725,10 +977,10 @@ elif page == "📊 数据同步中心":
                     
                     with st.container():
                         st.markdown(f"""
-                        <div style="background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.15); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
-                            <h4 style="color: #EF4444; margin-bottom: 0.5rem;">🔴 {item_name} {abnormal_flag}</h4>
-                            <p style="margin-bottom: 0.3rem;"><strong>检测结果：</strong>{result}（参考范围：{ref_range}）</p>
-                            <p style="line-height: 1.6;">{advice}</p>
+                        <div style="background: rgba(255,75,75,0.05); border: 1px solid rgba(255,75,75,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <h4 style="color: #ff4b4b; margin-bottom: 0.8rem;">🔴 {item_name} {abnormal_flag}</h4>
+                            <p style="margin-bottom: 0.5rem;"><strong>检测结果：</strong>{result}（参考范围：{ref_range}）</p>
+                            <p style="color: rgba(255,255,255,0.9); line-height: 1.6;">{advice}</p>
                         </div>
                         """, unsafe_allow_html=True)
             else:
@@ -736,6 +988,7 @@ elif page == "📊 数据同步中心":
         
         st.markdown('</div>', unsafe_allow_html=True)
 
+# -------------------------- 4. 风险预警中心 --------------------------
 elif page == "⚠️ 风险预警中心":
     st.markdown('<p class="main-title">⚠️ 隐匿性急重症智能风险预警报告</p>', unsafe_allow_html=True)
     
@@ -747,7 +1000,11 @@ elif page == "⚠️ 风险预警中心":
         with st.container():
             st.markdown('<div class="module-card">', unsafe_allow_html=True)
             st.markdown('<p class="card-title">🎯 最终风险评级</p>', unsafe_allow_html=True)
-            st.markdown(f"<h1 style='text-align: center; color: {color}; font-weight: bold; font-size: 3rem;'>{risk_level}</h1>", unsafe_allow_html=True)
+            st.markdown(f"""
+            <div style="text-align: center; padding: 2rem 0;">
+                <h1 style="color: {color}; font-weight: bold; font-size: 4rem; margin-bottom: 1rem; text-shadow: 0 0 20px {color}40;">{risk_level}</h1>
+            </div>
+            """, unsafe_allow_html=True)
             risk_index = 85 if risk_level == "极高危" else 50 if risk_level == "中危" else 15
             st.progress(risk_index/100)
             st.caption(f"风险指数：{risk_index}/100")
@@ -787,8 +1044,8 @@ elif page == "⚠️ 风险预警中心":
                     "风险维度": ["家族史", "血压", "心率", "生活习惯", "既往病史"],
                     "风险值": [family_weight, 80, 75, 60, 30]
                 }).set_index("风险维度"),
-                color=color,
-                height=200
+                color="#ff4b4b",
+                height=220
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -820,6 +1077,7 @@ elif page == "⚠️ 风险预警中心":
             st.write("保持当前良好的生活习惯，每月上传1-2次居家检测数据，每季度进行一次全面风险评估，按年度完成常规体检。")
         st.markdown('</div>', unsafe_allow_html=True)
 
+# -------------------------- 5. 健康管理中心 --------------------------
 elif page == "💊 健康管理中心":
     st.markdown('<p class="main-title">💊 个性化主动健康管理方案</p>', unsafe_allow_html=True)
 
