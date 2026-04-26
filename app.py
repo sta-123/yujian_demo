@@ -12,67 +12,47 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -------------------------- 顶级UI设计CSS（已优化：更清晰、更高对比度、更专业） --------------------------
+# -------------------------- 终极修复CSS（所有文字100%清晰） --------------------------
 st.markdown("""
 <style>
+    /* 全局基础样式 */
     html, body, [class*="css"] {
         font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif !important;
         font-weight: 400;
         letter-spacing: 0.3px;
     }
     
+    /* 主背景 */
     .stApp {
         background: #0F172A;
-        background-image: linear-gradient(135deg, #111827 0%, #1E293B 100%);
     }
     
+    /* 侧边栏 */
+    [data-testid="stSidebar"] {
+        background: #1E293B;
+        border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* 卡片样式 */
     .module-card {
         background: rgba(255, 255, 255, 0.04);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 14px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
     
-    .module-card:hover {
-        border-color: rgba(59, 130, 246, 0.25);
-        box-shadow: 0 6px 24px rgba(59, 130, 246, 0.12);
-    }
-    
-    [data-testid="stSidebar"] {
-        background: #1E293B;
-        border-right: 1px solid rgba(255,255,255,0.08);
-    }
-    
-    .sidebar-brand {
-        text-align: center;
-        padding: 1.5rem 1rem;
-        background: rgba(59, 130, 246, 0.08);
-        border-radius: 12px;
-        margin: 1rem;
-    }
-    
-    .sidebar-title {
-        color: #ffffff;
-        font-weight: 700;
-        font-size: 1.4rem;
-        background: linear-gradient(90deg, #60A5FA, #3B82F6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    
+    /* 标题样式 */
     .main-title {
-        color: #ffffff;
+        color: #ffffff !important;
         font-weight: 700;
         font-size: 2.1rem;
-        line-height: 1.3;
         margin-bottom: 0.5rem;
     }
     
     .subtitle {
-        color: rgba(255,255,255,0.85);
+        color: rgba(255,255,255,0.85) !important;
         font-size: 1rem;
         line-height: 1.6;
         margin-bottom: 1.5rem;
@@ -81,7 +61,7 @@ st.markdown("""
     .card-title {
         font-size: 1.25rem;
         font-weight: 600;
-        color: #ffffff;
+        color: #ffffff !important;
         margin-bottom: 1.2rem;
         display: flex;
         align-items: center;
@@ -96,87 +76,83 @@ st.markdown("""
         border-radius: 2px;
     }
     
-    /* 文字全局变清晰 */
-    p, li, div, span, label {
-        color: rgba(255,255,255,0.9) !important;
-        font-weight: 400 !important;
-        line-height: 1.5 !important;
-    }
-    
-    strong {
+    /* 强制所有文字为白色（解决文字不显示问题） */
+    p, li, div, span, label, h1, h2, h3, h4, h5, h6 {
         color: #ffffff !important;
-        font-weight: 600 !important;
     }
     
-    /* 指标卡片更清晰 */
+    /* 输入框/数字输入/文本域 文字强制白色 */
+    .stNumberInput input,
+    .stTextArea textarea,
+    .stTextInput input {
+        background: rgba(255,255,255,0.95) !important;
+        color: #000000 !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 1rem !important;
+    }
+    
+    /* 下拉框/选择框 文字强制白色 */
+    .stSelectbox div[data-baseweb="select"] {
+        background: rgba(255,255,255,0.95) !important;
+        border-radius: 10px;
+    }
+    .stSelectbox div[data-baseweb="select"] * {
+        color: #000000 !important;
+    }
+    /* 下拉框选项文字强制黑色 */
+    div[data-baseweb="popover"] div[role="listbox"] div[role="option"] {
+        color: #000000 !important;
+        background: #ffffff !important;
+    }
+    div[data-baseweb="popover"] div[role="listbox"] div[role="option"]:hover {
+        background: rgba(59,130,246,0.1) !important;
+    }
+    
+    /* 单选按钮文字强制白色 */
+    .stRadio label, .stRadio div[role="radiogroup"] label {
+        color: #ffffff !important;
+        font-size: 1.1rem !important;
+    }
+    .stRadio div[role="radiogroup"] div[role="radio"] {
+        transform: scale(1.3);
+    }
+    
+    /* 按钮样式 */
+    .stButton>button {
+        background: #2563EB;
+        color: #ffffff !important;
+        border: none;
+        border-radius: 10px;
+        padding: 0.7rem 1.4rem;
+        font-weight: 600;
+        font-size: 1rem !important;
+    }
+    .stButton>button:hover {
+        background: #1D4ED8;
+    }
+    
+    /* 指标卡片 */
     [data-testid="stMetric"] {
         background: rgba(255,255,255,0.05);
         border: 1px solid rgba(255,255,255,0.1);
         border-radius: 12px;
         padding: 1.2rem;
     }
-    
     [data-testid="stMetric"] label {
         color: rgba(255,255,255,0.8) !important;
-        font-size: 0.9rem !important;
+        font-size: 1rem !important;
     }
-    
     [data-testid="stMetricValue"] {
         color: #ffffff !important;
         font-size: 1.6rem !important;
-        font-weight: 700 !important;
+        font-weight: 700;
     }
     
-    /* 按钮更醒目 */
-    .stButton>button {
-        background: #2563EB;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        padding: 0.7rem 1.4rem;
-        font-weight: 600;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-    }
-    
-    .stButton>button:hover {
-        background: #1D4ED8;
-        transform: translateY(-1px);
-    }
-    
-    /* 输入框更清晰 */
-    .stNumberInput>div>div>input,
-    .stTextArea textarea,
-    .stSelectbox>div>div {
-        background: rgba(255,255,255,0.07);
+    /* 表格文字 */
+    .stDataFrame th, .stDataFrame td {
         color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.15);
-        border-radius: 10px;
-        padding: 0.7rem 1rem;
-        font-size: 0.95rem;
-    }
-    
-    .stNumberInput>div>div>input:focus,
-    .stTextArea textarea:focus,
-    .stSelectbox>div>div:focus {
-        border-color: #3B82F6;
-        box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
-    }
-    
-    /* 表格更清晰 */
-    .stDataFrame {
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    
-    .stDataFrame th {
-        background: rgba(59,130,246,0.12) !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-    }
-    
-    .stDataFrame td {
-        color: rgba(255,255,255,0.9) !important;
     }
     
     /* 进度条 */
@@ -189,40 +165,27 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         color: rgba(255,255,255,0.8);
         font-weight: 500;
-        border-radius: 8px;
     }
-    
     .stTabs [aria-selected="true"] {
         background: #2563EB;
-        color: #ffffff;
+        color: #ffffff !important;
         font-weight: 600;
     }
     
     /* 警告/提示框 */
     .stAlert {
         background: rgba(255,255,255,0.05) !important;
-        border-radius: 12px !important;
         border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 12px;
     }
     
     /* 隐藏默认菜单 */
     #MainMenu, footer, header {visibility: hidden;}
-    
-    /* 滚动条 */
-    ::-webkit-scrollbar {width: 6px; height: 6px;}
-    ::-webkit-scrollbar-track {background: rgba(255,255,255,0.05);}
-    ::-webkit-scrollbar-thumb {background: rgba(255,255,255,0.25); border-radius: 3px;}
 </style>
 """, unsafe_allow_html=True)
 
 # -------------------------- China-PAR 风险评估函数 --------------------------
 def china_par_score(age, gender, sbp, tc, hdl, has_diabetes, is_smoker):
-    """
-    China-PAR 10年ASCVD风险评估模型（简化版）
-    参考：中国心血管病风险评估和管理指南
-    返回：10年心血管病风险百分比
-    """
-    # 男性城市人群系数
     if gender == "男":
         base_survival = 0.9656
         coef_age = 0.048
@@ -242,11 +205,9 @@ def china_par_score(age, gender, sbp, tc, hdl, has_diabetes, is_smoker):
         coef_smoking = 0.356 if is_smoker else 0
         base_risk = -26.016
     
-    # 计算线性预测值
     lp = (base_risk + coef_age * age + coef_sbp * sbp + 
           coef_tc * tc + coef_hdl * hdl + coef_diabetes + coef_smoking)
     
-    # 转换为10年风险概率
     risk = 1 - base_survival ** np.exp(lp)
     return round(risk * 100, 1)
 
@@ -293,16 +254,15 @@ ABNORMAL_ADVICE = {
 # -------------------------- 侧边栏导航 --------------------------
 with st.sidebar:
     st.markdown("""
-    <div class="sidebar-brand">
+    <div style="text-align: center; padding: 1.5rem 1rem; background: rgba(59, 130, 246, 0.08); border-radius: 12px; margin: 1rem;">
         <div style="font-size: 2.2rem; margin-bottom: 0.6rem;">🩺</div>
-        <div class="sidebar-title">预健·MED·AI</div>
+        <div style="color: #ffffff; font-weight: 700; font-size: 1.4rem; background: linear-gradient(90deg, #60A5FA, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">预健·MED·AI</div>
         <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.3rem;">中青年急重症智能预警系统</div>
     </div>
     """, unsafe_allow_html=True)
     
     st.divider()
     
-    # 导航选项
     page = st.radio(
         "功能导航",
         ["🏠 系统首页", "📡 实时健康监测", "📊 数据同步中心", "⚠️ 风险预警中心", "💊 健康管理中心"],
@@ -311,7 +271,6 @@ with st.sidebar:
     
     st.divider()
     
-    # 系统状态
     st.markdown("""
     <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; margin: 1rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -324,7 +283,6 @@ with st.sidebar:
     
     st.divider()
     
-    # 隐私保护状态
     st.markdown("""
     <div style="padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 8px; margin: 1rem;">
         <p style="color: #3B82F6; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">🔒 隐私保护状态</p>
@@ -347,7 +305,6 @@ if 'user_data' not in st.session_state:
     }
 st.session_state.user_data.setdefault("health_score", 58)
 
-# 14天健康时序数据
 if 'health_data' not in st.session_state:
     dates = [datetime.now() - timedelta(days=i) for i in range(14, 0, -1)]
     base_hr = np.random.randint(65, 75, 11)
@@ -364,7 +321,6 @@ if 'health_data' not in st.session_state:
         "血氧饱和度": np.round(np.random.uniform(96, 99, 14), 1)
     })
 
-# 风险评估结果
 if 'risk_result' not in st.session_state:
     st.session_state.risk_result = (
         "极高危",
@@ -372,7 +328,6 @@ if 'risk_result' not in st.session_state:
         "近3天静息心率持续升高15%，合并血压昼夜节律异常，结合心脑血管家族史，心源性猝死、隐匿性冠心病风险显著升高。"
     )
 
-# 体检报告数据
 if 'physical_reports' not in st.session_state:
     report1 = pd.DataFrame({
         "指标名称": ["收缩压", "舒张压", "总胆固醇", "甘油三酯", "空腹血糖", "心率", "肌酸激酶", "低密度脂蛋白", "同型半胱氨酸"],
@@ -393,14 +348,8 @@ if 'physical_reports' not in st.session_state:
     st.session_state.physical_reports = [report1, report2]
     st.session_state.current_report_idx = 1
 
-# -------------------------- 风险预测核心函数（混合模型）--------------------------
+# -------------------------- 风险预测核心函数 --------------------------
 def predict_risk(health_data, user_info):
-    """
-    混合风险预测引擎：
-    - China-PAR 提供10年心血管病基线风险
-    - 近期趋势分析提供短期恶化信号
-    - 家族史、生活习惯提供额外权重
-    """
     recent_hr = health_data["静息心率"].tail(3).values
     recent_bp = health_data["收缩压"].tail(3).values
     age = user_info["age"]
@@ -408,13 +357,11 @@ def predict_risk(health_data, user_info):
     lifestyle = user_info["lifestyle"]
     has_family_history = "心脑血管" in user_info["family_history"]
     
-    # 判断糖尿病和吸烟（从生活习惯推测）
     has_diabetes = "糖尿病" in lifestyle or "血糖" in lifestyle
     is_smoker = "吸烟" in lifestyle or "抽烟" in lifestyle
     
-    # 估算血脂指标（从最新体检报告获取）
-    tc = 5.0  # 总胆固醇mmol/L默认
-    hdl = 1.2  # 高密度脂蛋白默认
+    tc = 5.0
+    hdl = 1.2
     if len(st.session_state.physical_reports) > 0:
         latest_report = st.session_state.physical_reports[-1]
         tc_row = latest_report[latest_report["指标名称"] == "总胆固醇"]
@@ -424,10 +371,8 @@ def predict_risk(health_data, user_info):
     
     sbp = np.mean(recent_bp)
     
-    # 1. China-PAR 基线风险
     par_risk = china_par_score(age, gender, sbp, tc, hdl, has_diabetes, is_smoker)
     
-    # 2. 近期趋势风险叠加
     trend_risk = 0
     risk_reason = ""
     
@@ -445,12 +390,10 @@ def predict_risk(health_data, user_info):
         trend_risk += 10
         risk_reason += "近期静息心率偏高；"
     
-    # 3. 家族史风险
     if has_family_history:
         trend_risk += 15
         risk_reason += "有心脑血管家族史；"
     
-    # 4. 综合评分
     total_risk = par_risk + trend_risk
     health_score = max(20, min(95, 100 - total_risk))
     
@@ -730,7 +673,6 @@ elif page == "📊 数据同步中心":
             if uploaded_file is not None:
                 with st.spinner("正在执行OCR文字识别→核心指标提取→异常值标注→数据同步至风险模型..."):
                     time.sleep(3)
-                    # 模拟生成新报告
                     new_report = pd.DataFrame({
                         "指标名称": ["收缩压", "舒张压", "总胆固醇", "甘油三酯", "空腹血糖", "心率", "肌酸激酶", "低密度脂蛋白", "同型半胱氨酸"],
                         "检测结果": [
@@ -762,7 +704,6 @@ elif page == "📊 数据同步中心":
                     st.session_state.physical_reports.append(new_report)
                     st.session_state.current_report_idx = len(st.session_state.physical_reports) - 1
                     
-                    # 联动风险模型
                     new_systolic = int(new_report.loc[new_report['指标名称'] == '收缩压', '检测结果'].values[0].replace('mmHg', ''))
                     new_hr = int(new_report.loc[new_report['指标名称'] == '心率', '检测结果'].values[0].replace('次/分', ''))
                     latest_dates = st.session_state.health_data.tail(3).index
